@@ -1,5 +1,5 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" AUTHOR: Jay Zeng (jayzeng@jay-zeng.com), Nick Rushton
+" AUTHOR: Nick Rushton (rushton.nicholas@gmail.com)
 " DESCRIPTION: Custom vimrc configuration based upon my personal preference
 " REQUIRED PLUGINS:
 "   - NERDCommenter
@@ -13,9 +13,10 @@
 "   - Surround
 " MAPING:
 "   leader = \
-"   - Ctrl+j 
+"   - Ctrl+j
 "   - Ctrl+k
-"   - jj = Esc   "   - F2 = Display NerdTree
+"   - jj = Esc
+"   - F2 = Display NerdTree
 "   - F6 = Display function list
 "   - \f = Display most recent files
 "   - \ff= Enable fuzzy file search
@@ -24,18 +25,22 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " General
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Turn on syntax highlighting 
+" Turn on syntax highlighting
 syntax on
 
-" Allows switching from unsaved buffer without saving it and share the history for multiple files. 
+" Allows switching from unsaved buffer without saving it and share the history for multiple files.
 set hidden
 
-" Set custom color scheme
-  colorscheme jellybeans
+" Turn on 256 color support
+set t_Co=256
 
-"Enable file type 
-filetype plugin on 
-"filetype indent on 
+" Set custom color scheme
+"colorscheme cleanphp
+colorscheme obsidian
+
+"Enable file type
+filetype plugin on
+"filetype indent on
 
 " Sync working directory with current working directory
 set autochdir
@@ -45,9 +50,6 @@ set autoread
 
 " Better command-line completion
 set wildmenu
-
-" auto retab
-autocmd BufWritePre * :retab
 
 " Display commands
 set showcmd
@@ -59,8 +61,12 @@ set incsearch
 " Turn off bell
 set novisualbell
 set noerrorbells
+
 set t_vs=
 set tm=500
+
+" show matching brackets
+set showmatch
 
 " case insensitive search
 set ignorecase
@@ -77,9 +83,9 @@ set number
 """"""""""""""""""""""""""""""
 " Identation settings - per the coding standard, uses 3 spaces as a tab
 """"""""""""""""""""""""""""""
-set shiftwidth=3
-set softtabstop=3
-set tabstop=3
+set shiftwidth=4
+set softtabstop=4
+set tabstop=5
 set expandtab
 " set cinkeys=0{,0},:,0#,!,!^F
 
@@ -140,17 +146,15 @@ let Tlist_File_Fold_Auto_Close = 1
 let Tlist_GainFocus_On_ToggleOpen = 1
 
 " width of window
-let Tlist_WinWidth = 20 
+let Tlist_WinWidth = 20
 " close tlist when a selection is made
 let Tlist_Close_On_Select = 1
 
-" loads up my custom tags 
-set tags=/usr/local/utilities/tags/intelius/tags
 
 """"""""""""""""""""""""""""""
 " Vim7 specific settings
 " Some hosts have vim6 and vim7 installed
-" Make sure you aliased vim=<path>/vim7 
+" Make sure you aliased vim=<path>/vim7
 """"""""""""""""""""""""""""""
 if version>=700
    autocmd FileType python set omnifunc=pythoncomplete#Complete
@@ -169,19 +173,17 @@ endif
 " Custom PHP syntax check
 """"""""""""""""""""""""""""""
 " run file with PHP CLI (CTRL-M)
-autocmd FileType php noremap <C-M> :w!<CR>:!/usr/local/bin/php %<CR>
+"autocmd FileType php noremap <C-M> :w!<CR>:!/usr/local/bin/php %<CR>
 
 " PHP parser check (CTRL-L)
-autocmd FileType php noremap <C-L> :!/usr/local/bin/php -l %<CR>
-
-" PHP unit test runner
-autocmd FileType php noremap <C-P> :!/usr/local/html/tests/phpunit %<CR>
-
+"autocmd FileType php noremap <C-L> :!/usr/local/bin/php -l %<CR>
 " Same as autochdir, this is a hack to revamp it as some plug-ins doesn't
 " regonize autochdir
 autocmd BufEnter * lcd %:p:h
 nmap <silent> nd :NERDTreeToggle<CR>
-map <F9> :TlistToggle<CR> map th :tabfirst<CR>
+hi Directory guifg=#FF0000 ctermfg=red
+map <F9> :TlistToggle<CR>
+map th :tabfirst<CR>
 map tj :tabnext<CR>
 map tk :tabprev<CR>
 map tl :tablast<CR>
@@ -204,60 +206,62 @@ let php_sql_query=1
 let php_htmlInStrings=1
 
 
-" Don't use the PHP syntax folding 
-setlocal foldmethod=manual 
+" Don't use the PHP syntax folding
+setlocal foldmethod=manual
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Fuzzyfinder settings 
+" Fuzzyfinder settings
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " After bringing up FufFile, **/<filename>
-nmap <leader>ff :FufFile **/<CR>
-omap <silent> iw <Plug>CamelCaseMotion_iw
-xmap <silent> iw <Plug>CamelCaseMotion_iw
-omap <silent> ib <Plug>CamelCaseMotion_ib
-xmap <silent> ib <Plug>CamelCaseMotion_ib
-omap <silent> ie <Plug>CamelCaseMotion_ie
-xmap <silent> ie <Plug>CamelCaseMotion_ie
+"nmap <leader>ff :FufFile **/<CR>
+"omap <silent> iw <Plug>CamelCaseMotion_iw
+"xmap <silent> iw <Plug>CamelCaseMotion_iw
+"omap <silent> ib <Plug>CamelCaseMotion_ib
+"xmap <silent> ib <Plug>CamelCaseMotion_ib
+"omap <silent> ie <Plug>CamelCaseMotion_ie
+"xmap <silent> ie <Plug>CamelCaseMotion_ie
 
-" Pathogen call
+inoremap <C-P> <ESC>:call PhpDocSingle()<CR>i
+nnoremap <C-P> :call PhpDocSingle()<CR>
+vnoremap <C-P> :call PhpDocRange()<CR>
+
+" json
+autocmd BufRead,BufNewFile *.json set filetype=javascript
+
+function! KillTrailingWhitespace()
+  let winview = winsaveview()
+  exec ':%s/\s\+$//e'
+  call winrestview(winview)
+endfunction
+
+autocmd BufWritePre * :call KillTrailingWhitespace()
+
 call pathogen#infect()
+call pathogen#helptags()
 
-" set 256-colors
-set t_Co=256
+" Plugin configs
+let g:CommandTAcceptSelectionMap = '<C-t>'
+let g:CommandTAcceptSelectionTabMap = '<CR>'
+let mapleader = ","
 
-if !has("python")
-   echo 'python NOT loaded'
-   finish
-endif
+" KEY MAPPINGS
+" " Minibuf keys
+map <leader>f :tabnext<CR>
+map <leader>b :tabprevious<CR>
 
-let g:Powerline_symbols = 'fancy'
-set guifont=~/.font/anonymous\ Pro-Powerline-Powerline.otf
+" " use ctrl-j/k/l/h to move around splits
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
 
-:highlight ExtraWhitespace ctermbg=darkgreen guibg=lightgreen
-:match ExtraWhitespace /\s\+$/
+nmap <leader>a <Esc>:Ack!
 
-" disable arrow keys
-noremap <Up> <nop>
-noremap <Down> <nop>
-noremap <Left> <nop>
-noremap <Right> <nop>
+" set tag file
+set tags=/usr/local/tags/tags
+let g:go_fmt_command = "goimports"
 
-" bind current timestame to a key
-:nnoremap <F8> "=strftime("%c")<CR>P
-:inoremap <F8> <C-R>=strftime("%c")<CR>
-
-
-"bind numbers plugin to F3
-nnoremap <F3> :NumbersToggle<CR></CR></F>
-
-""""""""""""""
-" tmux fixes "
-" """"""""""""""
-" Handle tmux $TERM quirks in vim
-if $TERM =~ '^screen-256color'
-  map <Esc>OH <Home>
-  map! <Esc>OH <Home>
-  map <Esc>OF <End>
-  map! <Esc>OF <End>
-endif
+" pylint
+set makeprg=pylint\ --reports=n\ --output-format=parseable\ %:p
+set errorformat=%f:%l:\ %m
