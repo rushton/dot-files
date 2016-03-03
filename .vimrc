@@ -265,3 +265,6 @@ let g:go_fmt_command = "goimports"
 " pylint
 set makeprg=pylint\ --reports=n\ --output-format=parseable\ %:p
 set errorformat=%f:%l:\ %m
+
+" ctags stuff
+set tags=/tmp/my_ctags
