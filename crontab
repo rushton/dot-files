@@ -1,0 +1,5 @@
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+# m h dom mon dow user	command
+*/2 * * * *    nick ctags -R -o /tmp/my_ctags ~/log_service/log_service
