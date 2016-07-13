@@ -1,30 +1,11 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " AUTHOR: Nick Rushton (rushton.nicholas@gmail.com)
 " DESCRIPTION: Custom vimrc configuration based upon my personal preference
-" REQUIRED PLUGINS:
-"   - NERDCommenter
-"   - NerdTree
-"   - FuzzyFinder
-"   - TagList
-"   - SnipMate
-"   - PHPFolding
-"   - PHPComplete
-"   - Supertab
-"   - Surround
-" MAPING:
-"   leader = \
-"   - Ctrl+j
-"   - Ctrl+k
-"   - jj = Esc
-"   - F2 = Display NerdTree
-"   - F6 = Display function list
-"   - \f = Display most recent files
-"   - \ff= Enable fuzzy file search
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" General
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" initialize pathogen
+execute pathogen#infect()
+
 " Turn on syntax highlighting
 syntax on
 
@@ -56,6 +37,7 @@ set showcmd
 
 " highlight search
 set hlsearch
+" re-do the search as each character is entered
 set incsearch
 
 " Turn off bell
@@ -63,30 +45,40 @@ set novisualbell
 set noerrorbells
 
 set t_vs=
-set tm=500
+set timeoutlen=250
 
-" show matching brackets
+" highlight matching brackets, parens, etc by highlighting the matching
+" character
 set showmatch
 
 " case insensitive search
 set ignorecase
+
+" overrides ignorecase if capital letters are used
 set smartcase
 
-" auto indentation
+" automatically indents when returning from an indented line
 set autoindent
+
+" smartly indents after returning from characters such as {
 set smartindent
+
+" automatic c program indenting
 set cindent
 
-" Line number
+" shows line numbers in the left hand column
 set number
 
-""""""""""""""""""""""""""""""
-" Identation settings - per the coding standard, uses 3 spaces as a tab
-""""""""""""""""""""""""""""""
+" replace TAB key with spaces
+set expandtab
+
+" number of spaces to use when auto indenting, such as in cindent
 set shiftwidth=4
+
+" number of spaces to use when hitting TAB
 set softtabstop=4
 set tabstop=5
-set expandtab
+
 " set cinkeys=0{,0},:,0#,!,!^F
 
 """"""""""""""""""""""""""""""
@@ -94,13 +86,13 @@ set expandtab
 """"""""""""""""""""""""""""""
 map <C-J> <C-W>j<C-W>_
 map <C-K> <C-W>k<C-W>_
+
 " Override esc key, use jj instead
 imap jj <Esc>
-set wmh=0
 
-""""""""""""""""""""""""""""""
-" Statusline
-""""""""""""""""""""""""""""""
+" minimum height a window can be
+set winminheight=0
+
 " Always hide the statusline
 set laststatus=2
 
@@ -110,6 +102,7 @@ set statusline=\ %{HasPaste()}%F%m%r%h%w\ \ Line:\ %l/%L:%c\ \ [TYPE=%Y]
 au InsertEnter * hi StatusLine term=reverse ctermbg=5 gui=undercurl guisp=Magenta
 au InsertLeave * hi StatusLine term=reverse ctermfg=0 ctermbg=2 gui=bold,reverse
 
+" shows PASTE MODE when in paste mode
 function! HasPaste()
     if &paste
         return 'PASTE MODE  '
@@ -169,66 +162,10 @@ if version>=700
    set autowrite
 endif
 
-""""""""""""""""""""""""""""""
-" Custom PHP syntax check
-""""""""""""""""""""""""""""""
-" run file with PHP CLI (CTRL-M)
-"autocmd FileType php noremap <C-M> :w!<CR>:!/usr/local/bin/php %<CR>
-
-" PHP parser check (CTRL-L)
-"autocmd FileType php noremap <C-L> :!/usr/local/bin/php -l %<CR>
-" Same as autochdir, this is a hack to revamp it as some plug-ins doesn't
-" regonize autochdir
-autocmd BufEnter * lcd %:p:h
-nmap <silent> nd :NERDTreeToggle<CR>
-hi Directory guifg=#FF0000 ctermfg=red
-map <F9> :TlistToggle<CR>
-map th :tabfirst<CR>
-map tj :tabnext<CR>
-map tk :tabprev<CR>
-map tl :tablast<CR>
-map tt :tabedit<Space>
-map tn :tabnext<Space>
-map tm :tabm<Space>
-
-""""""""""""""""""""""""""""""
-" PHP settings
-""""""""""""""""""""""""""""""
-let g:DisableAutoPHPFolding = 1
-let php_smart_members = 1
-let php_show_semicolon = 0
-let php_highlight_quotes = 1
-let php_special_functions = 0
-let php_htmlInStrings = 0
-let php_alt_comparisons = 0
-let php_smart_semicolon = 0
-let php_sql_query=1
-let php_htmlInStrings=1
-
-
-" Don't use the PHP syntax folding
-setlocal foldmethod=manual
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Fuzzyfinder settings
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" After bringing up FufFile, **/<filename>
-"nmap <leader>ff :FufFile **/<CR>
-"omap <silent> iw <Plug>CamelCaseMotion_iw
-"xmap <silent> iw <Plug>CamelCaseMotion_iw
-"omap <silent> ib <Plug>CamelCaseMotion_ib
-"xmap <silent> ib <Plug>CamelCaseMotion_ib
-"omap <silent> ie <Plug>CamelCaseMotion_ie
-"xmap <silent> ie <Plug>CamelCaseMotion_ie
-
-inoremap <C-P> <ESC>:call PhpDocSingle()<CR>i
-nnoremap <C-P> :call PhpDocSingle()<CR>
-vnoremap <C-P> :call PhpDocRange()<CR>
-
-" json
+" alias for filetype setting on json files
 autocmd BufRead,BufNewFile *.json set filetype=javascript
 
+" removes any trailing white spaces
 function! KillTrailingWhitespace()
   let winview = winsaveview()
   exec ':%s/\s\+$//e'
@@ -237,8 +174,6 @@ endfunction
 
 autocmd BufWritePre * :call KillTrailingWhitespace()
 
-call pathogen#infect()
-call pathogen#helptags()
 
 " Plugin configs
 let g:CommandTAcceptSelectionMap = '<C-t>'
@@ -265,6 +200,3 @@ let g:go_fmt_command = "goimports"
 " pylint
 set makeprg=pylint\ --reports=n\ --output-format=parseable\ %:p
 set errorformat=%f:%l:\ %m
-
-" ctags stuff
-set tags=/tmp/my_ctags
