@@ -77,7 +77,7 @@ set shiftwidth=4
 
 " number of spaces to use when hitting TAB
 set softtabstop=4
-set tabstop=5
+set tabstop=4
 
 " set cinkeys=0{,0},:,0#,!,!^F
 
@@ -97,15 +97,20 @@ set winminheight=0
 set laststatus=2
 
 " Format the statusline
-" Set statusline to this format: File Location Line:<number> [TYPE=<filetype>]
-set statusline=\ %{HasPaste()}%F%m%r%h%w\ \ Line:\ %l/%L:%c\ \ [TYPE=%Y]
-au InsertEnter * hi StatusLine term=reverse ctermbg=5 gui=undercurl guisp=Magenta
-au InsertLeave * hi StatusLine term=reverse ctermfg=0 ctermbg=2 gui=bold,reverse
+if has('statusline')
+   set laststatus=2
+   " Broken down into easily includeable segments
+   set statusline=%{HasPaste()} " show whether in paste mode on the status line
+   set statusline+=%F%m%r%h%w\  " Options
+   set statusline+=%{fugitive#statusline()} "  Git Hotness
+   set statusline+=\ [%{&ff}/%Y]            " filetype
+   set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
+endif
 
 " shows PASTE MODE when in paste mode
 function! HasPaste()
     if &paste
-        return 'PASTE MODE  '
+        return '<PASTE MODE>  '
     else
         return ''
     endif
@@ -200,3 +205,22 @@ let g:go_fmt_command = "goimports"
 " pylint
 set makeprg=pylint\ --reports=n\ --output-format=parseable\ %:p
 set errorformat=%f:%l:\ %m
+
+" directory to store swap files
+set directory=$HOME/.vimswap/,.
+
+" lines to scroll when cursor leaves screen
+set scrolljump=5
+" minimum lines to keep above and below cursor
+set scrolloff=3
+
+" alias ; to : if lazily lifting off the shift key
+nnoremap ; :
+
+" Wrapped lines goes down/up to next row, rather than next line in file.
+nnoremap j gj
+nnoremap k gk
+
+" visual shifting (does not exit Visual mode)
+vnoremap < <gv
+vnoremap > >gv
