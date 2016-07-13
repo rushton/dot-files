@@ -209,8 +209,6 @@ set errorformat=%f:%l:\ %m
 " directory to store swap files
 set directory=$HOME/.vimswap/,.
 
-" lines to scroll when cursor leaves screen
-set scrolljump=5
 " minimum lines to keep above and below cursor
 set scrolloff=3
 
