@@ -1,0 +1,32 @@
+#!/usr/bin/python
+import csv
+import argparse
+import sys
+import json
+
+def main():
+    """
+        Takes stdin assuming a csv stream, and outputs json
+    """
+    parser = argparse.ArgumentParser(description='Takes csv as input and outputs json for readability')
+    parser.add_argument(
+        '--separator',
+        type=str,
+        default=',',
+        help='change the separator used for splitting rows'
+    )
+    parser.add_argument(
+        '--header',
+        type=str,
+        default=None,
+        help='provide a header if none is present in the input'
+    )
+
+    args = parser.parse_args()
+
+    for row in csv.DictReader(sys.stdin, fieldnames=args.header.split(',') if args.header else None, delimiter=args.separator):
+        print json.dumps(row, indent=4)
+
+if __name__ == '__main__':
+    main()
+
