@@ -10,12 +10,18 @@ alias la='ls -la -h'
 alias s='git status'
 
 alias tmux='LD_LIBRARY_PATH=/usr/local/lib TERM=xterm-256color tmux'
-alias git-recent="git for-each-ref --sort=-committerdate refs/heads/ | awk -F"/" '{print $NF}' | head -n20"
+alias git-recent="git for-each-ref --sort=-committerdate refs/heads/ --format='%(refname)' | sed 's/refs\/heads\///g'"
 
 alias s3='fasts3'
 alias urldecode='python -c "import sys, urllib as ul; print ul.unquote_plus(sys.argv[1])"'
 
 alias sum="awk '{total = total + \$1}END{print total}'"
+
+# set of functions to convert bytes to various forms
+alias mb="awk '{print \$1/1024/1024, \"MB\"}'"
+alias gb="awk '{print \$1/1024/1024/1024, \"GB\"}'"
+alias tb="awk '{print \$1/1024/1024/1024/1024, \"TB\"}'"
+
 alias generalstats="awk 'BEGIN{max=0;}{sum+=\$1;count+=1;if(\$1>max){max=\$1}}END{if(count<=0){average=0}else{average=sum/count} printf \"Sum: %s -- Count: %s -- Average: %.2f -- Max: %s\n\", sum, count, average, max}'"
 alias h='history'
 alias ntosp="sed ':a;N;\$!ba;s/\n/ /g'"
