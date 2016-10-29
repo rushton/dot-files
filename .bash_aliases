@@ -16,6 +16,7 @@ alias s3='fasts3'
 alias urldecode='python -c "import sys, urllib as ul; print ul.unquote_plus(sys.argv[1])"'
 
 alias sum="awk '{total = total + \$1}END{print total}'"
+alias vi='nvim'
 
 # set of functions to convert bytes to various forms
 alias mb="awk '{print \$1/1024/1024, \"MB\"}'"

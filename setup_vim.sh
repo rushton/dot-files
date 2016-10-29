@@ -7,6 +7,9 @@ cp .vimrc ~/.vimrc
 mkdir -p ~/.vim/autoload ~/.vim/bundle
 curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 
+ln -s ~/.vim ~/.config/nvim
+ln -s ~/.vimrc ~/.config/nvim/init.vim
+
 # install plugins
 git clone https://github.com/ervandew/supertab.git ~/.vim/bundle/supertab/
 git clone https://github.com/scrooloose/syntastic.git ~/.vim/bundle/syntastic/
