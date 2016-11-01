@@ -13,7 +13,7 @@ alias tmux='LD_LIBRARY_PATH=/usr/local/lib TERM=xterm-256color tmux'
 alias git-recent="git for-each-ref --sort=-committerdate refs/heads/ --format='%(refname)' | sed 's/refs\/heads\///g'"
 
 alias s3='fasts3'
-alias urldecode='python -c "import sys, urllib as ul; print ul.unquote_plus(sys.argv[1])"'
+alias urldecode="python -c \"import urllib;import sys; print '\n'.join([urllib.unquote(line.rstrip()) for line in ([sys.argv[1]] if len(sys.argv) > 1 else sys.stdin)])\""
 
 alias sum="awk '{total = total + \$1}END{print total}'"
 alias vi='nvim'
