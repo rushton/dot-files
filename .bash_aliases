@@ -6,7 +6,11 @@ alias cp='cp -rf'
 alias ll='ls -l -h'
 alias la='ls -la -h'
 
-# git aliai
+# Most computers have a reasonable amount of RAM, this will make
+# sort rely less on caching results to disk and use memory instead.
+alias sort='sort --buffer-size=1024M'
+
+# git alias
 alias s='git status'
 
 alias tmux='LD_LIBRARY_PATH=/usr/local/lib TERM=xterm-256color tmux'
