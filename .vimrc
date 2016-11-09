@@ -3,6 +3,7 @@
 " DESCRIPTION: Custom vimrc configuration based upon my personal preference
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+set viminfo=%,\"100,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
 " initialize pathogen
 execute pathogen#infect()
 
@@ -16,12 +17,11 @@ set hidden
 set t_Co=256
 
 " Set custom color scheme
-"colorscheme cleanphp
 colorscheme obsidian
 
 "Enable file type
 filetype plugin on
-"filetype indent on
+filetype indent on
 
 " Sync working directory with current working directory
 set autochdir
@@ -222,3 +222,6 @@ nnoremap k gk
 " visual shifting (does not exit Visual mode)
 vnoremap < <gv
 vnoremap > >gv
+
+" can be set if using neovim
+" set termguicolors

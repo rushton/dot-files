@@ -2,6 +2,8 @@
 
 # copy the vimrc
 cp .vimrc ~/.vimrc
+mkdir -p ~/.vim/cache/
+touch ~/.vim/cache/.viminfo
 
 # install pathogen
 mkdir -p ~/.vim/autoload ~/.vim/bundle
