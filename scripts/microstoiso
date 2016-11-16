@@ -1,0 +1,15 @@
+#!/bin/python
+import re
+import sys
+from datetime import datetime
+
+def main():
+    micros_regex = re.compile("\d{13}")
+    for line in sys.stdin:
+        line = line.strip()
+        for (micros_string, date) in [(x,datetime.fromtimestamp(int(x) / 1000)) for x in set(micros_regex.findall(line))]:
+            line = line.replace(micros_string, date.isoformat())
+        print line
+
+if __name__ == '__main__':
+    main()
