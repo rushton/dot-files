@@ -22,6 +22,33 @@ alias urldecode="python -c \"import urllib;import sys; print '\n'.join([urllib.u
 alias sum="awk '{total = total + \$1}END{print total}'"
 alias vi='nvim'
 
+#############################################################################
+# gnuplot shortcuts
+### gnu plot does support input from stdin, but does not support plotting
+### multiple lines from stdin, thus we write the raw data to /tmp/gnuplotdata.
+### Not ideal for large datasets but ¯\_(ツ)_/¯
+##############################################################################
+autotitle="set key autotitle columnhead;"
+plotcommand="plot for [i=2:20] '/tmp/gnuplotdata' using 1:i with lines;"
+plotcommanddate="set timefmt '%Y-%m-%dT%H:%M:%S'; set xdata time;$plotcommand"
+# simple plot, assumes first column as the y-axis, any columns after that are plotted separately
+alias plot="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$plotcommand\" &> /dev/null && rm /tmp/gnuplotdata;"
+# same as plot but take the first line and assumes it contains the column headers, uses them for the legend
+alias plotautotitle="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$autotitle;$plotcommand\" &> /dev/null && rm /tmp/gnuplotdata;"
+# turns on stderr logging from gnuplot
+alias plotdebug="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$plotcommand\" && rm /tmp/gnuplotdata;"
+# same as plot, but assumes the first column is a date in the form <year>-<month>-<day>T<hour>:<minute>:<second>
+alias plotdate="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$plotcommanddate\" 2>/dev/null && rm /tmp/gnuplotdata;"
+# same as plot date, but with the same functionality as plotautotitle
+alias plotdateautotitle="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$autotitle;$plotcommanddate\" 2>/dev/null && rm /tmp/gnuplotdata;"
+# debug date plot
+alias plotdatedebug="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$plotcommanddate\" && rm /tmp/gnuplotdata;"
+# instead of plotting to a png, this plots ascii graph to the terminal
+alias plotdumb="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"set terminal dumb;$plotcommand;\" &> /dev/null && rm /tmp/gnuplotdata;"
+# same as plotdumb, but for dates
+alias plotdatedumb="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"set terminal dumb;$plotcommanddate;\" &> /dev/null && rm /tmp/gnuplotdata;"
+
+
 # set of functions to convert bytes to various forms
 alias mb="awk '{print \$1/1024/1024, \"MB\"}'"
 alias gb="awk '{print \$1/1024/1024/1024, \"GB\"}'"
