@@ -29,7 +29,7 @@ alias vi='nvim'
 ### Not ideal for large datasets but ¯\_(ツ)_/¯
 ##############################################################################
 autotitle="set key autotitle columnhead;"
-plotcommand="plot for [i=2:20] '/tmp/gnuplotdata' using 1:i with lines;"
+plotcommand="set style fill transparent solid 0.5 noborder;plot for [i=2:20] '/tmp/gnuplotdata' using 1:i with filledcurves y1=0;"
 plotcommanddate="set timefmt '%Y-%m-%dT%H:%M:%S'; set xdata time;$plotcommand"
 # simple plot, assumes first column as the y-axis, any columns after that are plotted separately
 alias plot="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$plotcommand\" &> /dev/null && rm /tmp/gnuplotdata;"
