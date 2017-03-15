@@ -32,20 +32,28 @@ alias vi='nvim'
 autotitle="set key autotitle columnhead;"
 plotcommand="load '~/gnuplot-palettes/dark2.pal'; plot for [i=2:20] '/tmp/gnuplotdata' using 1:i ls i lw 3 with lines;"
 plotcommanddate="set timefmt '%Y-%m-%dT%H:%M:%S'; set xdata time;$plotcommand"
+
 # simple plot, assumes first column as the y-axis, any columns after that are plotted separately
 alias plot="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$plotcommand\" &> /dev/null && rm /tmp/gnuplotdata;"
+
 # same as plot but take the first line and assumes it contains the column headers, uses them for the legend
 alias plotautotitle="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$autotitle;$plotcommand\" &> /dev/null && rm /tmp/gnuplotdata;"
+
 # turns on stderr logging from gnuplot
 alias plotdebug="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$plotcommand\" && rm /tmp/gnuplotdata;"
+
 # same as plot, but assumes the first column is a date in the form <year>-<month>-<day>T<hour>:<minute>:<second>
 alias plotdate="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$plotcommanddate\" 2>/dev/null && rm /tmp/gnuplotdata;"
+
 # same as plot date, but with the same functionality as plotautotitle
 alias plotdateautotitle="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$autotitle;$plotcommanddate\" 2>/dev/null && rm /tmp/gnuplotdata;"
+
 # debug date plot
 alias plotdatedebug="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$plotcommanddate\" && rm /tmp/gnuplotdata;"
+
 # instead of plotting to a png, this plots ascii graph to the terminal
 alias plotdumb="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"set terminal dumb;$plotcommand;\" &> /dev/null && rm /tmp/gnuplotdata;"
+
 # same as plotdumb, but for dates
 alias plotdatedumb="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"set terminal dumb;$plotcommanddate;\" &> /dev/null && rm /tmp/gnuplotdata;"
 
