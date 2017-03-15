@@ -27,9 +27,10 @@ alias vi='nvim'
 ### gnu plot does support input from stdin, but does not support plotting
 ### multiple lines from stdin, thus we write the raw data to /tmp/gnuplotdata.
 ### Not ideal for large datasets but ¯\_(ツ)_/¯
+### Requires: git@github.com:Gnuplotting/gnuplot-palettes.git in home dir for nicer colors
 ##############################################################################
 autotitle="set key autotitle columnhead;"
-plotcommand="set style fill transparent solid 0.5 noborder;plot for [i=2:20] '/tmp/gnuplotdata' using 1:i with filledcurves y1=0;"
+plotcommand="load '~/gnuplot-palettes/dark2.pal'; plot for [i=2:20] '/tmp/gnuplotdata' using 1:i ls i lw 3 with lines;"
 plotcommanddate="set timefmt '%Y-%m-%dT%H:%M:%S'; set xdata time;$plotcommand"
 # simple plot, assumes first column as the y-axis, any columns after that are plotted separately
 alias plot="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$plotcommand\" &> /dev/null && rm /tmp/gnuplotdata;"
