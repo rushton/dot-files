@@ -69,7 +69,7 @@ alias ntosp="sed ':a;N;\$!ba;s/\n/ /g'"
 alias ntocomma="sed ':a;N;\$!ba;s/\n/,/g'"
 
 # finds git commits from the last 24 hours authored by me
-alias whatdidido='for git_dir in $(find . -name .git -type d -prune);do git --no-pager --git-dir=$git_dir log --pretty=format:"%h - %an, %ar : %s" --since=$(date --date="1 day ago" +"%Y-%m-%dT%H:%M:%S") --author="[R|r]ushton" | sed "s#^#${git_dir} #" ; done;'
+alias whatdidido='for git_dir in $(find . -name .git -type d -prune);do git --no-pager --git-dir=$git_dir log --pretty=format:"%h - %an, %ar : %s" --since=$(date --date="1 day ago" +"%Y-%m-%dT%H:%M:%S") --author="[rR]ushton" | sed "s#^#${git_dir} #" | awk "{c+=1;print}END{if(c>0){print \"\"}}"; done;'
 
 starttmux() {
     tmux new-window "ssh $1"
