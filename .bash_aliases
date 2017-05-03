@@ -31,7 +31,11 @@ alias vi='nvim'
 ##############################################################################
 autotitle="set key autotitle columnhead;"
 plotcommand="load '~/gnuplot-palettes/dark2.pal'; plot for [i=2:20] '/tmp/gnuplotdata' using 1:i ls i lw 3 with lines;"
-plotcommanddate="set timefmt '%Y-%m-%dT%H:%M:%S'; set xdata time;$plotcommand"
+# "set format x" sets the display style for the date
+# "set bmargin" sets the bottom margin for the graph, this allows the x labels to be taller while staying visible
+# "set xtics rotate by" rotates the x labels 45 degress, which makes them readable
+# "set xtics offset" modifies the positioning so they are correctly aligned witht the x graph tics
+plotcommanddate="set timefmt '%Y-%m-%dT%H:%M:%S';set format x '%Y-%m-%d'; set bmargin 5.0; set xtics rotate by 45 offset -6.4,-3.2; set xdata time;$plotcommand"
 
 # simple plot, assumes first column as the y-axis, any columns after that are plotted separately
 alias plot="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$plotcommand\" &> /dev/null && rm /tmp/gnuplotdata;"
