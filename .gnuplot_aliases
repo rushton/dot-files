@@ -3,10 +3,11 @@
 ### gnu plot does support input from stdin, but does not support plotting
 ### multiple lines from stdin, thus we write the raw data to /tmp/gnuplotdata.
 ### Not ideal for large datasets but ¯\_(ツ)_/¯
-### Requires: git@github.com:Gnuplotting/gnuplot-palettes.git in home dir for nicer colors
+### Requires dark2.pal from git@github.com:Gnuplotting/gnuplot-palettes.git in home dir for nicer colors
+### curl https://raw.githubusercontent.com/Gnuplotting/gnuplot-palettes/master/dark2.pal > ~/gnuplot_dark2.pal
 ##############################################################################
 autotitle="set key autotitle columnhead;"
-plotcommand="load '~/gnuplot-palettes/dark2.pal'; plot for [i=2:20] '/tmp/gnuplotdata' using 1:i ls i lw 3 with lines;"
+plotcommand="load '~/gnuplot_dark2.pal'; plot for [i=2:20] '/tmp/gnuplotdata' using 1:i ls i lw 3 with lines;"
 # "set format x" sets the display style for the date
 # "set bmargin" sets the bottom margin for the graph, this allows the x labels to be taller while staying visible
 # "set xtics rotate by" rotates the x labels 45 degress, which makes them readable
