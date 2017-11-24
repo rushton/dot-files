@@ -50,3 +50,12 @@ starttmux() {
     tmux select-pane -t 0
     tmux set-window-option synchronize-panes on > /dev/null
 }
+
+function lb() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1">> ~/logbook/$(date '+%Y-%m-%d').md
+    echo "1. Consider the problem you’re attempting to solve" >> ~/logbook/$(date '+%Y-%m-%d').md
+    echo "2. Describe your method for solving it" >> ~/logbook/$(date '+%Y-%m-%d').md
+    echo "3. Describe the process of carrying out the method" >> ~/logbook/$(date '+%Y-%m-%d').md
+    echo "4. Record what happened, and ask how it could be improved" >> ~/logbook/$(date '+%Y-%m-%d').md
+    nvim ~/logbook/$(date '+%Y-%m-%d').md
+}
