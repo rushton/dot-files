@@ -53,24 +53,33 @@ starttmux() {
 
 # log-book function, creates a template for working through problems.
 # Requires a folder called logbook in the home directory
-# Usage: lb <problem summary>
+# Usage: lb [<problem summary>]
 function lb() {
-    now=$(date '+%Y-%m-%d')
-    echo "" >> ~/logbook/$now.md
-    echo "$1" >> ~/logbook/$now.md
-    echo "===============================================" >> ~/logbook/$now.md
-    echo "Started: $(date '+%Y-%m-%d %H:%M:%S')" >> ~/logbook/$now.md
-    echo "" >> ~/logbook/$now.md
-    echo "### 1. Consider the problem you’re attempting to solve" >> ~/logbook/$now.md
-    echo "" >> ~/logbook/$now.md
-    echo "### 2. Describe your method for solving it" >> ~/logbook/$now.md
-    echo "" >> ~/logbook/$now.md
-    echo "### 3. Describe the process of carrying out the method" >> ~/logbook/$now.md
-    echo "" >> ~/logbook/$now.md
-    echo "### 4. Record what happened" >> ~/logbook/$now.md
-    echo "" >> ~/logbook/$now.md
-    echo "### 5. How could it be improved?" >> ~/logbook/$now.md
-    echo "" >> ~/logbook/$now.md
-    echo "Completed: <use: date '+%Y-%m-%d'>" >> ~/logbook/$now.md
+    if [[ $# -eq 1 ]]
+    then
+        now=$(date '+%Y-%m-%d')
+        echo "" >> ~/logbook/$now.md
+        echo "$1" >> ~/logbook/$now.md
+        echo "===============================================" >> ~/logbook/$now.md
+        echo "Started: $(date '+%Y-%m-%d %H:%M:%S')" >> ~/logbook/$now.md
+        echo "" >> ~/logbook/$now.md
+        echo "### 1. Consider the problem you’re attempting to solve" >> ~/logbook/$now.md
+        echo "" >> ~/logbook/$now.md
+        echo "### 2. Describe your method for solving it" >> ~/logbook/$now.md
+        echo "" >> ~/logbook/$now.md
+        echo "### 3. Describe the process of carrying out the method" >> ~/logbook/$now.md
+        echo "" >> ~/logbook/$now.md
+        echo "### 4. Record what happened" >> ~/logbook/$now.md
+        echo "" >> ~/logbook/$now.md
+        echo "### 5. How could it be improved?" >> ~/logbook/$now.md
+        echo "" >> ~/logbook/$now.md
+        echo "Completed: <use: date '+%Y-%m-%d'>" >> ~/logbook/$now.md
+    elif [[ $# -gt 1 ]]
+    then
+        echo "Error: too many parameters"
+        echo "Usage: lb [<problem summary>]"
+        return 1
+    fi
+
     nvim ~/logbook/$now.md
 }
