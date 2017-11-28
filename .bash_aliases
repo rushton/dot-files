@@ -51,11 +51,26 @@ starttmux() {
     tmux set-window-option synchronize-panes on > /dev/null
 }
 
+# log-book function, creates a template for working through problems.
+# Requires a folder called logbook in the home directory
+# Usage: lb <problem summary>
 function lb() {
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1">> ~/logbook/$(date '+%Y-%m-%d').md
-    echo "1. Consider the problem you’re attempting to solve" >> ~/logbook/$(date '+%Y-%m-%d').md
-    echo "2. Describe your method for solving it" >> ~/logbook/$(date '+%Y-%m-%d').md
-    echo "3. Describe the process of carrying out the method" >> ~/logbook/$(date '+%Y-%m-%d').md
-    echo "4. Record what happened, and ask how it could be improved" >> ~/logbook/$(date '+%Y-%m-%d').md
-    nvim ~/logbook/$(date '+%Y-%m-%d').md
+    now=$(date '+%Y-%m-%d')
+    echo "" >> ~/logbook/$now.md
+    echo "$1" >> ~/logbook/$now.md
+    echo "===============================================" >> ~/logbook/$now.md
+    echo "Started: $(date '+%Y-%m-%d %H:%M:%S')" >> ~/logbook/$now.md
+    echo "" >> ~/logbook/$now.md
+    echo "### 1. Consider the problem you’re attempting to solve" >> ~/logbook/$now.md
+    echo "" >> ~/logbook/$now.md
+    echo "### 2. Describe your method for solving it" >> ~/logbook/$now.md
+    echo "" >> ~/logbook/$now.md
+    echo "### 3. Describe the process of carrying out the method" >> ~/logbook/$now.md
+    echo "" >> ~/logbook/$now.md
+    echo "### 4. Record what happened" >> ~/logbook/$now.md
+    echo "" >> ~/logbook/$now.md
+    echo "### 5. How could it be improved?" >> ~/logbook/$now.md
+    echo "" >> ~/logbook/$now.md
+    echo "Completed: <use: date '+%Y-%m-%d'>" >> ~/logbook/$now.md
+    nvim ~/logbook/$now.md
 }
