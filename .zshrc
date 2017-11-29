@@ -51,7 +51,10 @@ export HISTFILESIZE=100000               # big big history
 
 # Save and reload the history after each command finishes
 export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
-
+# Appends every command to the history file once it is executed                                                                              
+setopt inc_append_history                                                                                                                    
+# Reloads the history whenever you use it                                                                                                    
+setopt share_history 
 
 # 256 command line colors
 set t_Co=256
