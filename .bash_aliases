@@ -55,9 +55,9 @@ starttmux() {
 # Requires a folder called logbook in the home directory
 # Usage: lb [<problem summary>]
 function lb() {
+    now=$(date '+%Y-%m-%d')
     if [[ $# -eq 1 ]]
     then
-        now=$(date '+%Y-%m-%d')
         echo "" >> ~/logbook/$now.md
         echo "$1" >> ~/logbook/$now.md
         echo "===============================================" >> ~/logbook/$now.md
