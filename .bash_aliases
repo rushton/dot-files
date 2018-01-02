@@ -53,20 +53,20 @@ starttmux() {
 
 # log-book function, creates a template for working through problems.
 # Requires a folder called logbook in the home directory
-# Usage: lb <problem summary>
+# Usage: lb <problem summary>                        
 function lb() {
-    now=$(date '+%Y-%m-%d')
-    if [[ $# -eq 1 ]]
-    then
-        echo "\n$1" >> ~/logbook/$now.md
-        echo "===============================================" >> ~/logbook/$now.md
-        echo "Started: $(date '+%Y-%m-%d %H:%M:%S')\n" >> ~/logbook/$now.md
-        echo "### 1. Consider the problem you’re attempting to solve\n" >> ~/logbook/$now.md
-        echo "### 2. Describe your method for solving it\n" >> ~/logbook/$now.md
-        echo "### 3. Describe the process of carrying out the method\n" >> ~/logbook/$now.md
-        echo "### 4. Record what happened\n" >> ~/logbook/$now.md
-        echo "### 5. How could it be improved?\n" >> ~/logbook/$now.md
-        echo "Completed: <use: date '+%Y-%m-%d %H:%M:%S'>" >> ~/logbook/$now.md
+    now=$(date '+%Y-%m-%d')                          
+    if [[ $# -eq 1 ]]                                
+    then                                             
+        echo "\n$1                                   
+===============================================      
+Started: $(date '+%Y-%m-%d %H:%M:%S')\n              
+### 1. Consider the problem you’re attempting to solve\n
+### 2. Describe your method for solving it\n         
+### 3. Describe the process of carrying out the method\n
+### 4. Record what happened\n                        
+### 5. How could it be improved?\n                   
+Completed: <use: date '+%Y-%m-%d %H:%M:%S'>" >> ~/logbook/$now.md
     elif [[ $# -gt 1 ]]
     then
         echo "Error: too many parameters"
