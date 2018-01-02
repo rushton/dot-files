@@ -76,3 +76,19 @@ function lb() {
 
     nvim ~/logbook/$now.md
 }
+
+# Opens a tiled tmux window with all the supplied
+# hosts ssh'd into
+#
+# usage: sshall <host1> <host2> <host3> ...
+function sshall() {                         
+    tmux new-window                         
+    for h in $@                             
+    do                                      
+        tmux send-keys "ssh $h" Enter       
+        tmux split -h                       
+        tmux select-layout tiled            
+    done                                    
+    tmux kill-pane                          
+    tmux select-layout tiled                
+}
