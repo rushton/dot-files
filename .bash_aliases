@@ -59,9 +59,9 @@ function lb() {
     # if no parameters provided and logbook entries exist, open the logbook
     # with the maximum date.
     if [[ $# -eq 0 && $(ls ~/logbook | grep "^[0-9].*md$" | wc -l) -gt 0 ]]
+    then
         nvim ~/logbook/$(ls ~/logbook | grep "^[0-9].*md$" | sort | tail -n1)
-        return 0
-    then                                             
+        return 0                                          
     elif [[ $# -eq 1 ]]
     then
         echo "\n$1
