@@ -51,37 +51,42 @@ starttmux() {
     tmux set-window-option synchronize-panes on > /dev/null
 }
 
-# log-book function, creates a template for working through problems.               
-# Requires a folder called logbook in the home directory                            
+# log-book function, creates a template for working through problems.
+# Requires a folder called logbook in the home directory
 # Usage: lb <problem summary>             
-function lb() {                                                                     
-    now=$(date '+%Y-%m-%d')               
-    # if no parameters provided and logbook entries exist, open the logbook         
-    # with the maximum date.              
-    if [[ $# -eq 0 && $(ls ~/logbook | grep "^[0-9].*md$" | wc -l) -gt 0 ]]         
+function lb() {                           
+    DEFAULT_EDITOR=$EDITOR                                                          
+    if [ -z "$EDITOR" ]                   
     then                                  
-        nvim ~/logbook/$(ls ~/logbook | grep "^[0-9].*md$" | sort | tail -n1)       
-        return 0                                                                    
-    elif [[ $# -eq 1 ]]                                                             
-    then             
+        DEFAULT_EDITOR=vi                 
+    fi                                    
+    now=$(date '+%Y-%m-%d')               
+    # if no parameters provided and logbook entries exist, open the logbook
+    # with the maximum date.              
+    if [[ $# -eq 0 && $(ls ~/logbook | grep "^[0-9].*md$" | wc -l) -gt 0 ]]
+    then
+        $DEFAULT_EDITOR ~/logbook/$(ls ~/logbook | grep "^[0-9].*md$" | sort | tail -n1)
+        return 0                          
+    elif [[ $# -eq 1 ]]                                                                                                                                                  
+    then                                  
         equals_hr=                        
         echo "\n$1                        
-$(printf "=%.0s" {1..${#1}})                                                        
-Started: $(date '+%Y-%m-%d %H:%M:%S')\n                                             
-### 1. Consider the problem you’re attempting to solve\n                            
-### 2. Describe your method for solving it\n                                        
-### 3. Describe the process of carrying out the method\n                            
-### 4. Record what happened\n                                                       
+$(printf "=%.0s" {1..${#1}})              
+Started: $(date '+%Y-%m-%d %H:%M:%S')\n   
+### 1. Consider the problem you’re attempting to solve\n
+### 2. Describe your method for solving it\n
+### 3. Describe the process of carrying out the method\n
+### 4. Record what happened\n
 ### 5. How could it be improved?\n        
-Completed: <use: date '+%Y-%m-%d %H:%M:%S'>" >> ~/logbook/$now.md                   
+Completed: <use: date '+%Y-%m-%d %H:%M:%S'>" >> ~/logbook/$now.md
     elif [[ $# -gt 1 ]]                   
-    then                                                                            
+    then                                  
         echo "Error: too many parameters" 
-        echo "Usage: lb [<problem summary>]"                                        
+        echo "Usage: lb [<problem summary>]"
         return 1                          
     fi                                    
-                     
-    nvim ~/logbook/$now.md                
+                                          
+    $DEFAULT_EDITOR ~/logbook/$now.md     
 }
 
 
