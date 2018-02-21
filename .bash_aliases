@@ -23,7 +23,9 @@ alias sum="awk '{total = total + \$1}END{print total}'"
 alias vi='nvim'
 
 #Ctags, thx @lorainekv
-alias getctags='ctags -R -f ./.git/tags .'
+alias gentags='ctags -R -f ./.git/tags $(pwd)'     
+# generate tags for python, excludes import lines.
+alias genpytags='ctags -R --python-kinds=-i -f .git/tags $(pwd)'
 
 # source gnuplot aliases
 if [ -f ~/.gnuplot_aliases ]; then
