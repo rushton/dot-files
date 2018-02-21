@@ -33,7 +33,11 @@ alias plotdateautotitle="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$a
 alias plotdatedebug="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$plotcommanddate\" && rm /tmp/gnuplotdata;"
 
 # instead of plotting to a png, this plots ascii graph to the terminal
-alias plotdumb="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"set terminal dumb;$plotcommand;\" &> /dev/null && rm /tmp/gnuplotdata;"
+alias plotdumb="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"set terminal dumb;$plotcommand;\" 2>&1 /dev/null | grep -v warning && rm /tmp/gnuplotdata;"
+alias plotdumbautotitle="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"set terminal dumb;$autotitle;$plotcommand;\" 2>&1 /dev/null | grep -v warning && rm /tmp/gnuplotdata;"
+alias plotdumbdebug="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"set terminal dumb;$plotcommand;\" && rm /tmp/gnuplotdata;"
 
 # same as plotdumb, but for dates
-alias plotdatedumb="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"set terminal dumb;$plotcommanddate;\" &> /dev/null && rm /tmp/gnuplotdata;"
+alias plotdatedumb="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"set terminal dumb;$plotcommanddate\" 2>&1 /dev/null | grep -v warning && rm /tmp/gnuplotdata;"
+alias plotdatedumbautotitle="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"set terminal dumb;$autotitle;$plotcommanddate\" 2>&1 /dev/null | grep -v warning && rm /tmp/gnuplotdata;"
+alias plotdatedumbdebug="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"set terminal dumb;$plotcommanddate;\" 2>&1 /dev/null && rm /tmp/gnuplotdata;"
