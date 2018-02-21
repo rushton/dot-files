@@ -22,6 +22,9 @@ alias urldecode="python -c \"import urllib;import sys; print '\n'.join([urllib.u
 alias sum="awk '{total = total + \$1}END{print total}'"
 alias vi='nvim'
 
+#Ctags, thx @lorainekv
+alias getctags='ctags -R -f ./.git/tags .'
+
 # source gnuplot aliases
 if [ -f ~/.gnuplot_aliases ]; then
     source ~/.gnuplot_aliases
