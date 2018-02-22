@@ -6,8 +6,11 @@
 ### Requires dark2.pal from git@github.com:Gnuplotting/gnuplot-palettes.git in home dir for nicer colors
 ### curl https://raw.githubusercontent.com/Gnuplotting/gnuplot-palettes/master/dark2.pal > ~/gnuplot_dark2.pal
 ##############################################################################
+
 autotitle="set key autotitle columnhead;"
-plotcommand="load '~/gnuplot_dark2.pal'; plot for [i=2:20] '/tmp/gnuplotdata' using 1:i ls i lw 3 with lines;"
+#
+termwidth="set terminal wxt size 1200, 800;"
+plotcommand="set key out vert; set key left top;load '~/gnuplot_dark2.pal'; plot for [i=2:20] '/tmp/gnuplotdata' using 1:i ls i lw 3 with lines;"
 # "set format x" sets the display style for the date
 # "set bmargin" sets the bottom margin for the graph, this allows the x labels to be taller while staying visible
 # "set xtics rotate by" rotates the x labels 45 degress, which makes them readable
@@ -15,29 +18,46 @@ plotcommand="load '~/gnuplot_dark2.pal'; plot for [i=2:20] '/tmp/gnuplotdata' us
 plotcommanddate="set timefmt '%Y-%m-%dT%H:%M:%S';set format x '%Y-%m-%d'; set bmargin 5.0; set xtics rotate by 45 offset -6.4,-3.2; set xdata time;$plotcommand"
 
 # simple plot, assumes first column as the y-axis, any columns after that are plotted separately
-alias plot="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$plotcommand\" &> /dev/null && rm /tmp/gnuplotdata;"
+alias plot="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$termwidth$plotcommand\" &> /dev/null && rm /tmp/gnuplotdata;"
 
 # same as plot but take the first line and assumes it contains the column headers, uses them for the legend
-alias plotautotitle="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$autotitle;$plotcommand\" &> /dev/null && rm /tmp/gnuplotdata;"
+alias plotautotitle="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$termwidth$autotitle$plotcommand\" &> /dev/null && rm /tmp/gnuplotdata;"
 
 # turns on stderr logging from gnuplot
-alias plotdebug="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$plotcommand\" && rm /tmp/gnuplotdata;"
+alias plotdebug="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$termwidth$plotcommand\" && rm /tmp/gnuplotdata;"
 
 # same as plot, but assumes the first column is a date in the form <year>-<month>-<day>T<hour>:<minute>:<second>
-alias plotdate="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$plotcommanddate\" 2>/dev/null && rm /tmp/gnuplotdata;"
+alias plotdate="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$termwidth$plotcommanddate\" 2>/dev/null && rm /tmp/gnuplotdata;"
 
 # same as plot date, but with the same functionality as plotautotitle
-alias plotdateautotitle="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$autotitle;$plotcommanddate\" 2>/dev/null && rm /tmp/gnuplotdata;"
+alias plotdateautotitle="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$termwidth$autotitle;$plotcommanddate\" 2>/dev/null && rm /tmp/gnuplotdata;"
 
 # debug date plot
-alias plotdatedebug="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$plotcommanddate\" && rm /tmp/gnuplotdata;"
+alias plotdatedebug="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$termwidth$plotcommanddate\" && rm /tmp/gnuplotdata;"
 
-# instead of plotting to a png, this plots ascii graph to the terminal
-alias plotdumb="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"set terminal dumb;$plotcommand;\" 2>&1 /dev/null | grep -v warning && rm /tmp/gnuplotdata;"
-alias plotdumbautotitle="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"set terminal dumb;$autotitle;$plotcommand;\" 2>&1 /dev/null | grep -v warning && rm /tmp/gnuplotdata;"
-alias plotdumbdebug="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"set terminal dumb;$plotcommand;\" && rm /tmp/gnuplotdata;"
+# instead of plotting to a png, this plots ascii graph to the terminal. These are in functions so the tput command can be
+# evaluated each time this is run so the window height/width changes dynamically with the size of the window at any
+# given run.
+function plotdumb() {
+    tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e "set terminal dumb $(tput cols) $(tput lines);$plotcommand" 2>&1 /dev/null | grep -v warning && rm /tmp/gnuplotdata;
+}
+
+function plotdumbautotitle() {
+    tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e "set terminal dumb $(tput cols) $(tput lines);$autotitle;$plotcommand;" 2>&1 /dev/null | grep -v warning && rm /tmp/gnuplotdata;
+}
+function plotdumbdebug() {
+    tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e "set terminal dumb $(tput cols) $(tput lines);$plotcommand;" && rm /tmp/gnuplotdata;
+}
 
 # same as plotdumb, but for dates
-alias plotdatedumb="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"set terminal dumb;$plotcommanddate\" 2>&1 /dev/null | grep -v warning && rm /tmp/gnuplotdata;"
-alias plotdatedumbautotitle="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"set terminal dumb;$autotitle;$plotcommanddate\" 2>&1 /dev/null | grep -v warning && rm /tmp/gnuplotdata;"
-alias plotdatedumbdebug="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"set terminal dumb;$plotcommanddate;\" 2>&1 /dev/null && rm /tmp/gnuplotdata;"
+function plotdatedumb() {
+    tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e "set terminal dumb $(tput cols) $(tput lines);$plotcommanddate" 2>&1 /dev/null | grep -v warning && rm /tmp/gnuplotdata;
+}
+
+function plotdatedumbautotitle() {
+    tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e "set terminal dumb $(tput cols) $(tput lines);$autotitle;$plotcommanddate" 2>&1 /dev/null | grep -v warning && rm /tmp/gnuplotdata;
+}
+
+function plotdatedumbdebug() {
+    tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e "set terminal dumb $(tput cols) $(tput lines);$plotcommanddate;" 2>&1 /dev/null && rm /tmp/gnuplotdata;
+}
