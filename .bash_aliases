@@ -22,6 +22,9 @@ alias urldecode="python -c \"import urllib;import sys; print '\n'.join([urllib.u
 alias sum="awk '{total = total + \$1}END{print total}'"
 alias vi='nvim'
 
+# echo to stderr instead of stdout
+alias echostderr=">&2 echo"
+
 #Ctags, thx @lorainekv
 alias gentags='ctags -R -f ./.git/tags $(pwd)'     
 # generate tags for python, excludes import lines.
