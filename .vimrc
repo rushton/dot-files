@@ -225,3 +225,6 @@ vnoremap > >gv
 
 " can be set if using neovim
 " set termguicolors
+
+" hide swap and pyc files in vim directory listing
+let g:netrw_list_hide= '.*\.sw[a-z]$,.*\.pyc$'
