@@ -35,10 +35,44 @@ if [ -f ~/.gnuplot_aliases ]; then
     source ~/.gnuplot_aliases
 fi
 
-# set of functions to convert bytes to various forms
-alias mb="awk '{print \$1/1024/1024, \"MB\"}'"
-alias gb="awk '{print \$1/1024/1024/1024, \"GB\"}'"
-alias tb="awk '{print \$1/1024/1024/1024/1024, \"TB\"}'"
+# set of functions to convert bytes to various units back and forth
+
+# Usage:
+# tb [num_tb]
+# given num_tb, the function will echo the number of bytes
+# given stdin, the function will convert the first space tokenized value to terabytes
+function tb () {          
+    if [ $# -eq 0 ]; then                                                                                
+        cat /dev/stdin | awk '{print \$1/1024/1024/1024/1024, \"TB\"}'                                    
+    else                                                                                                 
+        echo $(($1 * 1024 * 1024 * 1024 * 1024)) "bytes"                                                  
+    fi                                              
+}                                                   
+
+# Usage:
+# tb [num_gb]
+# given num_gb, the function will echo the number of bytes
+# given stdin, the function will convert the first space tokenized value to gigabytes
+function gb () {                                    
+    if [ $# -eq 0 ]; then                                                                                
+        cat /dev/stdin | awk '{print \$1/1024/1024/1024, \"TB\"}'                                        
+    else                                                                                                 
+        echo $(($1 * 1024 * 1024 * 1024)) "bytes"                                                        
+    fi                                              
+}                         
+
+# Usage:
+# tb [num_mb]
+# given num_mb, the function will echo the number of bytes
+# given stdin, the function will convert the first space tokenized value to megabytes
+function mb () {
+    if [ $# -eq 0 ]; then
+        cat /dev/stdin | awk '{print \$1/1024/1024, \"TB\"}'
+    else
+        echo $(($1 * 1024 * 1024)) "bytes"
+    fi
+}
+
 
 alias generalstats="awk 'BEGIN{max=0;}{sum+=\$1;count+=1;if(\$1>max){max=\$1}}END{if(count<=0){average=0}else{average=sum/count} printf \"Sum: %s -- Count: %s -- Average: %.2f -- Max: %s\n\", sum, count, average, max}'"
 alias h='history'
