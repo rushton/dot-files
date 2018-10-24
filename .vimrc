@@ -199,7 +199,7 @@ nnoremap <C-H> <C-W><C-H>
 nmap <leader>a <Esc>:Ack!
 
 " set tag file
-set tags=/usr/local/tags/tags
+set tags=./git/tags-dep,tags-dep,./.git/tags
 let g:go_fmt_command = "goimports"
 
 " pylint
