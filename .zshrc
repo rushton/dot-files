@@ -51,7 +51,7 @@ export HISTFILESIZE=100000               # big big history
 
 # Save and reload the history after each command finishes
 export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
-# Appends every command to the history file once it is executed                                                                              
+# Appends every command to the history file once it is executed
 setopt inc_append_history
 
 # 256 command line colors
@@ -99,4 +99,5 @@ bindkey '^i' expand-or-complete-prefix
 echo 'unsetopt global_rcs' >> ~/.zprofile
 
 
- export EDITOR=vim
+export EDITOR=vim
+bindkey '^o^o' edit-command-line
