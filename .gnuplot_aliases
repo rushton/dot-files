@@ -5,17 +5,25 @@
 ### Not ideal for large datasets but ¯\_(ツ)_/¯
 ### Requires dark2.pal from git@github.com:Gnuplotting/gnuplot-palettes.git in home dir for nicer colors
 ### curl https://raw.githubusercontent.com/Gnuplotting/gnuplot-palettes/master/dark2.pal > ~/gnuplot_dark2.pal
+###
+### Requires installation of imagemagick:
+### wget https://imagemagick.org/download/ImageMagick.tar.gz && \
+### tar xzf ImageMagick.tar.gz && \
+### cd ImageMagick && \
+### ./configure --with-x=11 && \
+### make && sudo make install && rm -r ImageMagick*
 ##############################################################################
 
 autotitle="set key autotitle columnhead;"
 #
-termwidth="set terminal wxt size 1200, 800;"
-plotcommand="set key out vert; set key left top;load '~/gnuplot_dark2.pal'; plot for [i=2:20] '/tmp/gnuplotdata' using 1:i ls i lw 3 with lines;"
+termwidth="set terminal png size 1200, 800; set output '| display png:-';"
+plotcommand="set tics font 'Helvetica,10'; set key out vert; set key left top;load '~/gnuplot_dark2.pal'; plot for [i=2:20] '/tmp/gnuplotdata' using 1:i ls i lw 3 with lines;"
 # "set format x" sets the display style for the date
 # "set bmargin" sets the bottom margin for the graph, this allows the x labels to be taller while staying visible
 # "set xtics rotate by" rotates the x labels 45 degress, which makes them readable
 # "set xtics offset" modifies the positioning so they are correctly aligned witht the x graph tics
-plotcommanddate="set timefmt '%Y-%m-%dT%H:%M:%S';set format x '%Y-%m-%d'; set bmargin 5.0; set xtics rotate by 45 offset -6.4,-3.2; set xdata time;$plotcommand"
+plotcommanddate="set timefmt '%Y-%m-%dT%H:%M:%S';set format x '%Y-%m-%d'; set bmargin 5.0;set rmargin 5.0; set xtics nomirror rotate by -60; set xdata time;$plotcommand"
+plotcommanddatehour="set timefmt '%Y-%m-%dT%H:%M:%S';set format x '%Y-%m-%dT%H'; set bmargin 6.0; set rmargin 6.0; set xtics nomirror rotate by -60 offset 0,0; set xdata time;$plotcommand"
 
 # simple plot, assumes first column as the y-axis, any columns after that are plotted separately
 alias plot="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$termwidth$plotcommand\" &> /dev/null && rm /tmp/gnuplotdata;"
@@ -28,9 +36,11 @@ alias plotdebug="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$termwidth
 
 # same as plot, but assumes the first column is a date in the form <year>-<month>-<day>T<hour>:<minute>:<second>
 alias plotdate="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$termwidth$plotcommanddate\" 2>/dev/null && rm /tmp/gnuplotdata;"
+alias plotdatehour="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$termwidth$plotcommanddatehour\" 2>/dev/null && rm /tmp/gnuplotdata;"
 
 # same as plot date, but with the same functionality as plotautotitle
 alias plotdateautotitle="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$termwidth$autotitle;$plotcommanddate\" 2>/dev/null && rm /tmp/gnuplotdata;"
+alias plotdatehourautotitle="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$termwidth$autotitle;$plotcommanddatehour\" 2>/dev/null && rm /tmp/gnuplotdata;"
 
 # debug date plot
 alias plotdatedebug="tee /tmp/gnuplotdata > /dev/null &&  gnuplot -p -e \"$termwidth$plotcommanddate\" && rm /tmp/gnuplotdata;"
