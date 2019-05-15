@@ -7,8 +7,8 @@ import iso8601
 def main():
     limit = int(sys.argv[1]) if len(sys.argv) > 1 else None
     iso_matcher = re.compile('[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:Z|[+\-][0-9]{2}:[0-9]{2})')
-    diff = None
     for line in sys.stdin:
+        diff = None
         matches = iso_matcher.findall(line)
         for match in matches[:limit]:
             d = iso8601.parse_date(match)
@@ -17,9 +17,9 @@ def main():
             else:
                 diff -= d
         if isinstance(diff, timedelta):
-            print(line.strip() + " " + str(int(diff.total_seconds())))
+            print(line.rstrip() + " " + str(int(diff.total_seconds())))
         else:
-            print(line.strip())
+            print(line.rstrip())
 
 if __name__ == '__main__':
     main()
