@@ -9,14 +9,10 @@ def main():
     for line in sys.stdin:
         diff = None
         matches = iso_matcher.findall(line)
-        for match in matches[:2]:
-            d = iso8601.parse_date(match)
-            if not diff:
-                diff = d
-            else:
-                diff -= d
-        if isinstance(diff, timedelta):
-            print(line.rstrip() + " " + str(int(diff.total_seconds())))
+        if len(matches) > 1:
+            first_date, last_date = [iso8601.parse_date(m) for m in matches[:2]]
+            diff = abs(int((first_date - last_date).total_seconds()))
+            print(line.rstrip() + " " + str(diff))
         else:
             print(line.rstrip())
 
