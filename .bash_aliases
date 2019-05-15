@@ -22,8 +22,16 @@ alias urldecode="python -c \"import urllib;import sys; print '\n'.join([urllib.u
 alias sum="awk '{total = total + \$1}END{print total}'"
 alias vi='nvim'
 
+alias pqdump='java -jar ~/Downloads/Parquet-Dump-assembly-1.1.1.jar'
+
 # echo to stderr instead of stdout
 alias echostderr=">&2 echo"
+
+if [ $(command -v gsed) ]; then
+    alias thousands="gsed --unbuffered ':a;s/\B[0-9]\{3\}\>/,&/;ta'"
+else
+    alias thousands="sed --unbuffered ':a;s/\B[0-9]\{3\}\>/,&/;ta'"
+fi
 
 #Ctags, thx @lorainekv
 alias gentags='ctags -R -f ./.git/tags $(pwd)'     
