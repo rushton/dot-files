@@ -36,8 +36,8 @@ fi
 # prints a line every nth line, always includes the last line
 # Args:
 #   $1 - int determining n
-every () {
-        awk -v nth="$1" '(NR-1)%nth==0{print}END{print}'
+function every () {
+    awk -v nth="$1" '(NR-1)%nth==0{print}END{print}'
 }
 
 #Ctags, thx @lorainekv
