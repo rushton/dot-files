@@ -20,6 +20,18 @@ alias s3='fasts3'
 alias urldecode="python -c \"import urllib;import sys; print '\n'.join([urllib.unquote(line.rstrip()) for line in ([sys.argv[1]] if len(sys.argv) > 1 else sys.stdin)])\""
 
 alias sum="awk '{total = total + \$1}END{print total}'"
+alias runningsum="awk 'BEGIN{total=0}{total = total + \$1; print \$1, total; fflush()}'"
+
+# Sums values by key
+# Params:
+# $1 - index of the key you want to group by (default: 1)
+# $2 - index of the value you want to sum (default: 2)
+function sumbykey() {
+    key_index=${1:-1}
+    value_index=${2:-2}
+    awk -v key_index="$key_index" -v value_index="$value_index" '{a[$(key_index)]+= $(value_index)}END{for(k in a){print k, a[k]}}'
+}
+
 alias vi='nvim'
 
 alias pqdump='java -jar ~/Downloads/Parquet-Dump-assembly-1.1.1.jar'
