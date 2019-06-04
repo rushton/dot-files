@@ -228,3 +228,6 @@ vnoremap > >gv
 
 " hide swap and pyc files in vim directory listing
 let g:netrw_list_hide= '.*\.sw[a-z]$,.*\.pyc$'
+
+" https://github.com/numirias/security/blob/master/doc/2019-06-04_ace-vim-neovim.md
+set nomodeline
