@@ -42,20 +42,20 @@ def main():
     )
 
     args = parser.parse_args()
+    unit = args.unit
+    if unit.lower() == 'seconds' or unit.lower() == 's':
+        unit_divisor = 1
+    elif unit.lower() == 'minutes' or unit.lower() == 'm':
+        unit_divisor = 60
+    elif unit.lower() == 'hours' or unit.lower() == 'h':
+        unit_divisor = 60 * 60
+    elif unit.lower() == 'days' or unit.lower() == 'd':
+        unit_divisor = 60 * 60 * 24
+    else:
+        raise Exception('invalid unit choice')
+
     for line in sys.stdin:
         diff_seconds = diff_dates(line)
-        unit = args.unit
-        if unit.lower() == 'seconds' or unit.lower() == 's':
-            unit_divisor = 1
-        elif unit.lower() == 'minutes' or unit.lower() == 'm':
-            unit_divisor = 60
-        elif unit.lower() == 'hours' or unit.lower() == 'h':
-            unit_divisor = 60 * 60
-        elif unit.lower() == 'days' or unit.lower() == 'd':
-            unit_divisor = 60 * 60 * 24
-        else:
-            raise Exception('invalid unit choice')
-
         if diff_seconds:
             print("%s %.3f" % (line.rstrip(), diff_seconds/unit_divisor))
         else:
