@@ -134,3 +134,63 @@ function sshall() {
     tmux kill-pane                          
     tmux select-layout tiled                
 }
+
+function tshirt() {
+    PID=$$
+    DIVISOR=$(echo "$1" | awk 'BEGIN{divisor=1}/mb/{divisor=1*1024*1024}END{printf "%.1f", divisor}')
+    cat | sort -n > /tmp/tshirt.$PID
+    sum=$(awk '{s+=$1}END{print s}' /tmp/tshirt.$PID)
+    gawk -v divisor=$DIVISOR -v third=$(echo $sum"/3" | bc) '
+    current_sum >= third{
+        sums[i++]=current_sum
+        counts[j++]=current_count
+        max[k++]=median_arr[length(median_arr)-1]
+        min[l++]=median_arr[0]
+        if (length(median_arr) % 2) {
+            median[m++]=median_arr[(length(median_arr)+1)/2]
+        } else {
+            median[m++]=(median_arr[length(median_arr)/2] + median_arr[(length(median_arr)/2) + 1]) / 2.0
+        }
+
+        current_sum=current_count=n=0
+        delete median_arr
+
+    }
+    {
+        current_sum+=$1
+        current_count+=1
+        median_arr[n++]=$1
+        total_sum+=$1
+        total_count+=1
+    }
+    END {
+        sums[i++]=current_sum
+        counts[j++]=current_count
+        max[k++]=median_arr[length(median_arr) - 1]
+        min[l++]=median_arr[0]
+        if (length(median_arr) % 2) {
+            median[m++]=median_arr[(length(median_arr)+1)/2]
+        } else {
+            median[m++]=(median_arr[length(median_arr)/2] + median_arr[(length(median_arr)/2) + 1]) / 2.0
+        }
+
+        for(k in sums){
+            printf "%d %d %.3f %.3f %.3f %.3f %.3f\n",
+                sums[k]/divisor,
+                counts[k],
+                sums[k] / counts[k] / divisor,
+                median[k]/divisor,
+                min[k]/divisor,
+                max[k]/divisor,
+                (counts[k] / total_count)*100
+        }
+    }' /tmp/tshirt.$PID | \
+    awk 'BEGIN{
+        print "size sum count average median min max pct_of_total_count"
+    }
+    NR==1{sz="small"}
+    NR==2{sz="medium"}
+    NR==3{sz="large"}
+    {print sz, $0}'  | column -t
+    rm /tmp/tshirt.$PID
+}
