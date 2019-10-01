@@ -99,8 +99,28 @@ function mb () {
         echo $(($1 * 1024 * 1024)) "B"
     fi
 }
-
-alias generalstats="awk 'BEGIN{max=0;}{sum+=\$1;count+=1;if(\$1>max){max=\$1}}END{if(count<=0){average=0}else{average=sum/count} printf \"Sum: %s -- Count: %s -- Average: %.2f -- Max: %s\n\", sum, count, average, max}'"
+alias generalstats="sort -n | awk 'BEGIN{
+    sum=0
+    average=0
+    print \"sum count average median min max\"
+}{
+    sum+=\$1
+    if(\$1>max){
+        max=\$1
+    }
+    median_arr[n++]=\$1
+}END{
+    count=length(median_arr)
+    if(count>0){
+        average=sum/count
+    }
+    if (length(median_arr) % 2) {
+        median=median_arr[(length(median_arr)+1)/2]
+    } else {
+        median=(median_arr[length(median_arr)/2] + median_arr[(length(median_arr)/2) + 1]) / 2.0
+    }
+    print sum, count, average, median, median_arr[0], median_arr[length(median_arr) - 1]
+}' | column -t"
 alias h='history'
 alias ntosp="sed ':a;N;\$!ba;s/\n/ /g'"
 alias ntocomma="sed ':a;N;\$!ba;s/\n/,/g'"
