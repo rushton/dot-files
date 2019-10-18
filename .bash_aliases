@@ -99,27 +99,41 @@ function mb () {
         echo $(($1 * 1024 * 1024)) "B"
     fi
 }
-alias generalstats="sort -n | awk 'BEGIN{
+alias generalstats="sort -n | awk '
+function pctile(sorted_array, pct) {
+    count=length(sorted_array)
+    idx=(pct * count) - 1
+    idx=idx < 0 ? 0 : idx
+    return (idx == int(idx)) ? sorted_array[int(idx)] : sorted_array[int(idx) + 1]
+}
+BEGIN{
     sum=0
     average=0
-    print \"sum count average median min max\"
-}{
+    print \"sum count average min max tp50 tp75 tp90 tp95 tp99 tp999\"
+}
+{
     sum+=\$1
     if(\$1>max){
         max=\$1
     }
     median_arr[n++]=\$1
-}END{
+}
+END{
     count=length(median_arr)
     if(count>0){
         average=sum/count
     }
-    if (length(median_arr) % 2) {
-        median=median_arr[(length(median_arr)+1)/2]
-    } else {
-        median=(median_arr[length(median_arr)/2] + median_arr[(length(median_arr)/2) + 1]) / 2.0
-    }
-    print sum, count, average, median, median_arr[0], median_arr[length(median_arr) - 1]
+    print sum,
+          count,
+          average,
+          pctile(median_arr, 0),
+          pctile(median_arr, 1),
+          pctile(median_arr, .5),
+          pctile(median_arr, .75),
+          pctile(median_arr, .90),
+          pctile(median_arr, .95),
+          pctile(median_arr, .99)
+          pctile(median_arr, .999)
 }' | column -t"
 alias h='history'
 alias ntosp="sed ':a;N;\$!ba;s/\n/ /g'"
