@@ -132,7 +132,7 @@ END{
           pctile(median_arr, .75),
           pctile(median_arr, .90),
           pctile(median_arr, .95),
-          pctile(median_arr, .99)
+          pctile(median_arr, .99),
           pctile(median_arr, .999)
 }' | column -t"
 alias h='history'
