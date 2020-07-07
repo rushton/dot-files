@@ -57,7 +57,7 @@ set number
 set winminheight=0
 
 " automatically change the directory to the current file
-"set autochdir
+set autochdir
 
 
 """"""""""""""""""""""""""""""
