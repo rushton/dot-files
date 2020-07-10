@@ -10,6 +10,7 @@ Plug 'nanotech/jellybeans.vim'
 Plug 'skreek/skeletor.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'vim-test/vim-test'
+Plug 'tpope/vim-fugitive'
 call plug#end()
 
 
