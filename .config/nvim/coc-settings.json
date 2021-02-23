@@ -4,7 +4,8 @@
     "python.linting.flake8Enabled": true,
     "python.linting.mypyEnabled": true,
     "python.formatting.provider": "black",
-    "coc.preferences.formatOnSaveFiletypes": [ "python" ],
+    "coc.preferences.formatOnSaveFiletypes": [ "python", "scala" ],
     "suggest.autoTrigger": "trigger",
-    "coc.preferences.jumpCommand": "split"
+    "coc.preferences.jumpCommand": "split",
+    "metals.scalafmtConfigPath": "project/.scalafmt.conf"
 }
