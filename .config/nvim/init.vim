@@ -7,7 +7,6 @@ Plug 'scrooloose/nerdtree'
 " Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 Plug 'tomasr/molokai'
 Plug 'nanotech/jellybeans.vim'
-Plug 'skreek/skeletor.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'vim-test/vim-test'
 Plug 'tpope/vim-fugitive'
@@ -21,7 +20,7 @@ syntax on
 filetype plugin indent on
 set termguicolors
 
-colorscheme skeletor
+colorscheme PaperColor
 
 " reduce the timeout delay after pressing escape
 set timeoutlen=250
