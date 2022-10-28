@@ -15,6 +15,7 @@ function main() {
     install_zshrc_config
     install_git_config
     install_tmux_config
+    install_fzf
 }
 
 function install_brew() {
@@ -141,6 +142,18 @@ function install_tmux_config() {
     echo "Instaling tmux config."
     _backup_file "$HOME/.tmux.conf"
     curl -s https://raw.githubusercontent.com/rushton/dot-files/master/.tmux.conf > $HOME/.tmux.conf
+}
+
+function install_fzf() {
+    echo "Instaling fzf."
+    if ! command -v fzf &> /dev/null
+    then
+        echo "Installing fzf"
+        brew install fzf
+	$(brew --prefix)/opt/fzf/install --all --key-bindings --completion --update-rc
+    else
+        echo "fzf already exists, skipping install."
+    fi
 }
 
 function _backup_file() {

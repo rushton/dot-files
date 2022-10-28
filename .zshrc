@@ -60,3 +60,5 @@ echo 'unsetopt global_rcs' >> ~/.zprofile
 
 export EDITOR=nvim
 bindkey '^o^o' edit-command-line
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
