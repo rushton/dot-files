@@ -51,11 +51,25 @@ function install_kitty() {
 function install_nvim() {
     if ! command -v nvim &> /dev/null
     then
-        echo "Installing neovim"
+        echo "Installing neovim."
         brew install neovim
     else
         echo "neovim already exists, skipping install."
     fi
+
+    echo "Installing neovim config."
+    mkdir -p "$HOME/.config/nvim/"
+    _backup_file "$HOME/.config/nvim/init.vim"
+    curl -s https://raw.githubusercontent.com/rushton/dot-files/master/.config/nvim/init.vim > "$HOME/.config/nvim/init.vim"
+
+    if [ -f "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim ]
+    then
+        echo "Vim-plug already exists, skipping install"
+    else 
+	    echo "Installing vim-plug."
+	    sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    fi
+    nvim -c ":PlugClean" -c ":PlugInstall" -c ":qa"
 }
 
 function install_golang() {
