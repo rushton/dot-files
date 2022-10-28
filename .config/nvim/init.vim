@@ -1,9 +1,9 @@
-
-
 call plug#begin(stdpath('data') . '/plugged')
 " Using Vim-Plug
 Plug 'navarasu/onedark.nvim'
 call plug#end()
+
+colorscheme onedark
 
 syntax on
 filetype plugin indent on
