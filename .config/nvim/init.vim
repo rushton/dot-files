@@ -3,6 +3,9 @@ call plug#begin(stdpath('data') . '/plugged')
 Plug 'navarasu/onedark.nvim'
 call plug#end()
 
+let g:onedark_config = {
+    \ 'style': 'deep',
+\}
 colorscheme onedark
 
 syntax on
@@ -59,6 +62,3 @@ nnoremap k gk
 " visual shifting (does not exit Visual mode)
 vnoremap < <gv
 vnoremap > >gv
-
-
-

@@ -60,7 +60,7 @@ function install_nvim() {
     echo "Installing neovim config."
     mkdir -p "$HOME/.config/nvim/"
     _backup_file "$HOME/.config/nvim/init.vim"
-    curl -s https://raw.githubusercontent.com/rushton/dot-files/master/.config/nvim/init.vim > "$HOME/.config/nvim/init.vim"
+    curl -s https://raw.githubusercontent.com/rushton/dot-files/master/.config/nvim/init.vim > $HOME/.config/nvim/init.vim
 
     if [ -f "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim ]
     then
