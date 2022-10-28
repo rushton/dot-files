@@ -11,7 +11,12 @@ function main() {
     set_keyboard_preferences
     set_trackpad_preferences
     set_dock_preferences
+    install_bash_aliases
+    install_zshrc_config
+    install_git_config
+    install_tmux_config
 }
+
 function install_brew() {
     if ! command -v brew &> /dev/null
     then
@@ -75,7 +80,7 @@ function install_tmux() {
 
 
 function install_oh_my_zsh() {
-    if [ -d ".oh-my-zsh" ]; then
+    if [ -d "$HOME/.oh-my-zsh" ]; then
         echo "oh-my-zsh already exists, skipping install."
     else
         echo "Installing oh-my-zsh."
@@ -108,6 +113,43 @@ function set_keyboard_preferences() {
     echo "Setting keyboard preferences."
     defaults write -g InitialKeyRepeat -int 10 # normal minimum is 15 (225 ms)
     defaults write -g KeyRepeat -int 1 # normal minimum is 2 (30 ms)
+}
+
+function install_bash_aliases() {
+    echo "Installing bash aliases."
+    _backup_file "$HOME/.bash_aliases"
+    curl -s https://raw.githubusercontent.com/rushton/dot-files/master/.bash_aliases > $HOME/.bash_aliases
+}
+
+function install_zshrc_config() {
+    echo "Installing zshrc."
+    _backup_file "$HOME/.zshrc"
+    curl -s https://raw.githubusercontent.com/rushton/dot-files/master/.zshrc > $HOME/.zshrc
+    zsh "$HOME/.zshrc"
+}
+
+function install_git_config() {
+    if [ -f "$HOME/.gitconfig" ]; then
+        echo "git config already exists, skipping."
+    else
+        echo "Instaling git config."
+        curl -s https://raw.githubusercontent.com/rushton/dot-files/master/.gitconfig > $HOME/.gitconfig
+    fi
+}
+
+function install_tmux_config() {
+    echo "Instaling tmux config."
+    _backup_file "$HOME/.tmux.conf"
+    curl -s https://raw.githubusercontent.com/rushton/dot-files/master/.tmux.conf > $HOME/.tmux.conf
+}
+
+function _backup_file() {
+    local source_file=$1
+    if [ -f "$source_file" ]; then
+        local fname="$source_file.bak.$(date -u +%s)"
+        echo "$source_file already exists, backing up to $fname."
+	cp $source_file $fname
+    fi
 }
 
 main
