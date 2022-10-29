@@ -13,7 +13,9 @@ function main() {
     install_oh_my_zsh
     set_keyboard_preferences
     set_trackpad_preferences
+    set_mouse_preferences
     set_dock_preferences
+    set_clock_preferences
     install_bash_aliases
     install_zshrc_config
     install_git_config
@@ -110,7 +112,7 @@ function install_oh_my_zsh() {
 }
 
 function set_dock_preferences() {
-    echo "Setting dock preferences."
+    echo "Setting Mac dock preferences."
     echo '
 tell application "System Events" to set the autohide of the dock preferences to true
 tell application "System Events" to set the screen edge of the dock preferences to left
@@ -120,9 +122,14 @@ tell application "System Events" to set the screen edge of the dock preferences 
     rm /tmp/hide_dock_script.scpt
 }
 
+function set_clock_preferences() {
+    echo "Setting Mac clock preferences"
+    defaults write com.apple.menuextra.clock DateFormat -string "EEE MMM d  j:mm:ss a"
+}
+
 
 function set_trackpad_preferences() {
-    echo "Setting trackpad preferences."
+    echo "Setting Mac trackpad preferences."
     # tap-to-click enabled
     defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
     defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
@@ -130,8 +137,14 @@ function set_trackpad_preferences() {
     defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 }
 
+function set_mouse_preferences() {
+    echo "Setting Mac mouse preferences."
+    # increase mouse sensitivity
+    defaults write -g com.apple.mouse.scaling -int 2
+}
+
 function set_keyboard_preferences() {
-    echo "Setting keyboard preferences."
+    echo "Setting Mac keyboard preferences."
     defaults write -g InitialKeyRepeat -int 10 # normal minimum is 15 (225 ms)
     defaults write -g KeyRepeat -int 1 # normal minimum is 2 (30 ms)
 }
