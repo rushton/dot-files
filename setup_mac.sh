@@ -1,10 +1,13 @@
 #!/bin/bash
 
+
+DOTFILESDIR=$(dirname "$0")
+
 function main() {
     install_brew
     install_firefox
     install_kitty
-    install_nvim
+    install_neovim
     install_golang
     install_tmux
     install_oh_my_zsh
@@ -49,7 +52,7 @@ function install_kitty() {
     fi
 }
 
-function install_nvim() {
+function install_neovim() {
     if ! command -v nvim &> /dev/null
     then
         echo "Installing neovim."
@@ -61,7 +64,7 @@ function install_nvim() {
     echo "Installing neovim config."
     mkdir -p "$HOME/.config/nvim/"
     _backup_file "$HOME/.config/nvim/init.vim"
-    curl -s https://raw.githubusercontent.com/rushton/dot-files/master/.config/nvim/init.vim > $HOME/.config/nvim/init.vim
+    cp $DOTFILESDIR/.config/nvim/init.vim $HOME/.config/nvim/init.vim
 
     if [ -f "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim ]
     then
@@ -70,7 +73,7 @@ function install_nvim() {
 	    echo "Installing vim-plug."
 	    sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
     fi
-    nvim -c ":PlugClean" -c ":PlugInstall" -c ":qa"
+    nvim -c ":PlugClean" -c ":PlugInstall" -c ":LspInstall gopls" -c ":LspInstall bashls" -c ":LspInstall jdtls"
 }
 
 function install_golang() {
@@ -134,13 +137,13 @@ function set_keyboard_preferences() {
 function install_bash_aliases() {
     echo "Installing bash aliases."
     _backup_file "$HOME/.bash_aliases"
-    curl -s https://raw.githubusercontent.com/rushton/dot-files/master/.bash_aliases > $HOME/.bash_aliases
+    cp $DOTFILESDIR/.bash_aliases $HOME/.bash_aliases
 }
 
 function install_zshrc_config() {
     echo "Installing zshrc."
     _backup_file "$HOME/.zshrc"
-    curl -s https://raw.githubusercontent.com/rushton/dot-files/master/.zshrc > $HOME/.zshrc
+    cp $DOTFILESDIR/.zshrc $HOME/.zshrc
     zsh "$HOME/.zshrc"
 }
 
@@ -149,14 +152,14 @@ function install_git_config() {
         echo "git config already exists, skipping."
     else
         echo "Instaling git config."
-        curl -s https://raw.githubusercontent.com/rushton/dot-files/master/.gitconfig > $HOME/.gitconfig
+        cp $DOTFILESDIR/.gitconfig $HOME/.gitconfig
     fi
 }
 
 function install_tmux_config() {
     echo "Instaling tmux config."
     _backup_file "$HOME/.tmux.conf"
-    curl -s https://raw.githubusercontent.com/rushton/dot-files/master/.tmux.conf > $HOME/.tmux.conf
+    cp $DOTFILESDIR/.tmux.conf $HOME/.tmux.conf
 }
 
 function install_fzf() {
@@ -190,7 +193,5 @@ function _backup_file() {
 	cp $source_file $fname
     fi
 }
-
-
 
 main
