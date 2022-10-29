@@ -47,6 +47,8 @@ function install_kitty() {
     then
         echo "Installing kitty"
         curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+        mkdir -p ~/.config/kitty/
+        cp $DOTFILESDIR/.config/kitty/kitty.conf ~/.config/kitty/kitty.conf
     else
         echo "kitty already exists, skipping install."
     fi
