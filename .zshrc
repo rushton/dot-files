@@ -40,14 +40,11 @@ setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history 
 setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
 setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
 
-# 256 command line colors
-set t_Co=256
-
 # remove annoying correction on zsh
 unsetopt correct_all
 
 # golang env variables
-export GOROOT=/usr/local/go
+export GOROOT=/usr/local/opt/go/libexec/
 export PATH=$PATH:$GOROOT/bin
 export GOPATH=~/gocode/
 

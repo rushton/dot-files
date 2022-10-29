@@ -16,6 +16,7 @@ function main() {
     install_git_config
     install_tmux_config
     install_fzf
+    install_node
 }
 
 function install_brew() {
@@ -170,6 +171,17 @@ function install_fzf() {
     fi
 }
 
+function install_node() {
+    if ! command -v node &> /dev/null
+    then
+        echo "Installing node"
+        brew install node
+    else
+        echo "node already exists, skipping install."
+    fi
+
+}
+
 function _backup_file() {
     local source_file=$1
     if [ -f "$source_file" ]; then
@@ -178,5 +190,7 @@ function _backup_file() {
 	cp $source_file $fname
     fi
 }
+
+
 
 main
