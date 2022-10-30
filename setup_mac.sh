@@ -22,6 +22,7 @@ function main() {
     install_tmux_config
     install_fzf
     install_node
+    install_sdkman && install_java
 }
 
 function install_brew() {
@@ -207,6 +208,17 @@ function _backup_file() {
         echo "$source_file already exists, backing up to $fname."
 	cp $source_file $fname
     fi
+}
+
+function install_sdkman() {
+    curl -s "https://get.sdkman.io" | bash
+    source ~/.zshrc
+}
+ 
+function install_java() {
+    sdk install java 17.0.5-zulu
+    sdk install gradle
+    sdk install maven
 }
 
 main
