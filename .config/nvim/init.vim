@@ -1,6 +1,8 @@
 call plug#begin(stdpath('data') . '/plugged')
 " Using Vim-Plug
 Plug 'navarasu/onedark.nvim'
+Plug 'folke/tokyonight.nvim'
+Plug 'morhetz/gruvbox'
 
 " LSP Support
 Plug 'neovim/nvim-lspconfig'
@@ -20,12 +22,16 @@ Plug 'L3MON4D3/LuaSnip'
 Plug 'rafamadriz/friendly-snippets'
 
 Plug 'VonHeikemen/lsp-zero.nvim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+
 call plug#end()
 
 let g:onedark_config = {
     \ 'style': 'deep',
 \}
 colorscheme onedark
+
 
 syntax on
 filetype plugin indent on
@@ -81,7 +87,22 @@ nnoremap k gk
 " visual shifting (does not exit Visual mode)
 vnoremap < <gv
 vnoremap > >gv
+autocmd BufWritePre *.go lua vim.lsp.buf.format({ async = false })
+autocmd BufWritePre *.java lua vim.lsp.buf.format({ async = false })
 
+
+"" syntax highlight all the golang things
+" let g:go_highlight_build_constraints = 1
+" let g:go_highlight_extra_types = 1
+" let g:go_highlight_fields = 1
+" let g:go_highlight_format_strings = 1
+" let g:go_highlight_function_calls = 1
+" let g:go_highlight_functions = 1
+" let g:go_highlight_generate_tags = 1
+" let g:go_highlight_methods = 1
+" let g:go_highlight_operators = 1
+" let g:go_highlight_structs = 1
+" let g:go_highlight_types = 1
 
 " LSP support
 lua <<EOF
@@ -104,4 +125,22 @@ lsp.set_preferences({
     info = ''
   }
 })
+lsp.ensure_installed({
+  'jdtls',
+  'gopls',
+  'bashls',
+})
+EOF
+
+" Treesitter configuration
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = { "java", "go", "python", "scala" },
+  sync_install = true,
+  auto_install = true,
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = true,
+  },
+}
 EOF
