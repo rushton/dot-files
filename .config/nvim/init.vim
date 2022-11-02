@@ -88,6 +88,9 @@ nnoremap k gk
 vnoremap < <gv
 vnoremap > >gv
 
+" Autoformat files prior to write
+autocmd BufWritePre * :silent! lua vim.lsp.buf.format({async=false})
+
 " LSP support
 lua <<EOF
 local lsp = require('lsp-zero')
@@ -115,6 +118,7 @@ lsp.ensure_installed({
   'bashls',
   'pyright',
   'vimls',
+  'jsonls',
 })
 EOF
 
