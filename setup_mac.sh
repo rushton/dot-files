@@ -7,6 +7,7 @@ function main() {
     install_brew
     install_firefox
     install_kitty
+    install_node
     install_neovim
     install_golang
     install_tmux
@@ -14,14 +15,12 @@ function main() {
     set_keyboard_preferences
     set_trackpad_preferences
     set_mouse_preferences
-    set_dock_preferences
     set_clock_preferences
     install_bash_aliases
     install_zshrc_config
     install_git_config
     install_tmux_config
     install_fzf
-    install_node
     install_sdkman && install_java
 }
 
@@ -29,7 +28,7 @@ function install_brew() {
     if ! command -v brew &> /dev/null
     then
         echo "Installing brew"
-        bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     else
         echo "brew already exists, skipping install."
     fi
@@ -78,7 +77,8 @@ function install_neovim() {
 	    echo "Installing vim-plug."
 	    sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
     fi
-    nvim -c ":PlugClean" -c ":PlugInstall" -c ":LspInstall gopls" -c ":LspInstall bashls" -c ":LspInstall jdtls"
+    nvim -c ":PlugClean" -c ":PlugInstall" 
+    nvim -c ":LspInstall gopls" -c ":LspInstall bashls" -c ":LspInstall jdtls"
 }
 
 function install_golang() {
@@ -110,17 +110,6 @@ function install_oh_my_zsh() {
         echo "Installing oh-my-zsh."
         sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     fi
-}
-
-function set_dock_preferences() {
-    echo "Setting Mac dock preferences."
-    echo '
-tell application "System Events" to set the autohide of the dock preferences to true
-tell application "System Events" to set the screen edge of the dock preferences to left
-
-' > /tmp/hide_dock_script.scpt
-    osascript /tmp/hide_dock_script.scpt
-    rm /tmp/hide_dock_script.scpt
 }
 
 function set_clock_preferences() {

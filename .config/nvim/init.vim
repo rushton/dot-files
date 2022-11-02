@@ -87,22 +87,6 @@ nnoremap k gk
 " visual shifting (does not exit Visual mode)
 vnoremap < <gv
 vnoremap > >gv
-autocmd BufWritePre *.go lua vim.lsp.buf.format({ async = false })
-autocmd BufWritePre *.java lua vim.lsp.buf.format({ async = false })
-
-
-"" syntax highlight all the golang things
-" let g:go_highlight_build_constraints = 1
-" let g:go_highlight_extra_types = 1
-" let g:go_highlight_fields = 1
-" let g:go_highlight_format_strings = 1
-" let g:go_highlight_function_calls = 1
-" let g:go_highlight_functions = 1
-" let g:go_highlight_generate_tags = 1
-" let g:go_highlight_methods = 1
-" let g:go_highlight_operators = 1
-" let g:go_highlight_structs = 1
-" let g:go_highlight_types = 1
 
 " LSP support
 lua <<EOF
@@ -129,6 +113,8 @@ lsp.ensure_installed({
   'jdtls',
   'gopls',
   'bashls',
+  'pyright',
+  'vimls',
 })
 EOF
 
