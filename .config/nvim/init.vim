@@ -23,8 +23,6 @@ Plug 'rafamadriz/friendly-snippets'
 
 Plug 'VonHeikemen/lsp-zero.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-
-
 call plug#end()
 
 let g:onedark_config = {
@@ -73,6 +71,8 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 
+" Sets the time to wait before a hover action initiates
+set updatetime=250
 """"""""""""""""""""""""""""""
 " Custom key mappings
 """"""""""""""""""""""""""""""
@@ -119,6 +119,26 @@ lsp.ensure_installed({
   'pyright',
   'vimls',
   'jsonls',
+})
+EOF
+
+" opens a diagnostic window when an error is present on the line
+autocmd CursorHold * lua vim.diagnostic.open_float()
+lua <<EOF
+vim.diagnostic.config({
+  virtual_text = false,
+  signs = true,
+  update_in_insert = false,
+  underline = true,
+  severity_sort = true,
+  float = {
+    focusable = false,
+    style = 'minimal',
+    border = 'rounded',
+    source = 'always',
+    header = '',
+    prefix = '',
+  },
 })
 EOF
 
