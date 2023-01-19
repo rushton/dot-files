@@ -23,6 +23,9 @@ Plug 'rafamadriz/friendly-snippets'
 
 Plug 'VonHeikemen/lsp-zero.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+" NERDTree                                                                                                                                                                                          
+Plug 'preservim/nerdtree'
 call plug#end()
 
 let g:onedark_config = {
@@ -73,6 +76,10 @@ set expandtab
 
 " Sets the time to wait before a hover action initiates
 set updatetime=250
+
+" Show the full file path in the status line                                                                                                                                                        
+set statusline+=%F
+
 """"""""""""""""""""""""""""""
 " Custom key mappings
 """"""""""""""""""""""""""""""
