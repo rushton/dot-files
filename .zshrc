@@ -48,6 +48,31 @@ export GOROOT=/usr/local/opt/go/libexec/
 export PATH=$PATH:$GOROOT/bin
 export GOPATH=~/gocode/
 
+# set jq colors, everything is default except null values (first index), ordered as:
+# - color for `null`
+# - color for `false`
+# - color for `true`
+# - color for numbers
+# - color for strings
+# - color for arrays
+# - color for objects
+# first value is style:
+# - 1 (bright)
+# - 2 (dim)
+# - 4 (underscore)
+# - 5 (blink)
+# - 7 (reverse)
+# - 8 (hidden)
+# second value is color:
+# - 30 (black)
+# - 31 (red)
+# - 32 (green)
+# - 33 (yellow)
+# - 34 (blue)
+# - 35 (magenta)
+# - 36 (cyan)
+# - 37 (white)
+export JQ_COLORS="2;37:0;39:0;39:0;39:0;32:1;39:1;39"
 
 # stop stupid debian zsh package from moving cursor to
 # the beginning of the line when searching history w/
@@ -59,7 +84,16 @@ export EDITOR=nvim
 bindkey '^o^o' edit-command-line
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# Make fzf respect .gitignore file
+# Setting fd as the default source for fzf
+export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix'
+# To apply the command to CTRL-T as well
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/Users/nick/.sdkman"
-[[ -s "/Users/nick/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/nick/.sdkman/bin/sdkman-init.sh"
+export SDKMAN_DIR="/Users/nrushton/.sdkman"
+[[ -s "/Users/nrushton/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/nrushton/.sdkman/bin/sdkman-init.sh"
+
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
