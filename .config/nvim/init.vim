@@ -24,8 +24,14 @@ Plug 'rafamadriz/friendly-snippets'
 Plug 'VonHeikemen/lsp-zero.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
-" NERDTree                                                                                                                                                                                          
+" Git support
+Plug 'tpope/vim-fugitive'
+
+" NERDTree
 Plug 'preservim/nerdtree'
+
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 call plug#end()
 
 let g:onedark_config = {
@@ -77,9 +83,8 @@ set expandtab
 " Sets the time to wait before a hover action initiates
 set updatetime=250
 
-" Show the full file path in the status line                                                                                                                                                        
+" Show the full file path in the status line
 set statusline+=%F
-
 """"""""""""""""""""""""""""""
 " Custom key mappings
 """"""""""""""""""""""""""""""
@@ -102,7 +107,20 @@ autocmd BufWritePre * :silent! lua vim.lsp.buf.format({async=false})
 lua <<EOF
 local lsp = require('lsp-zero')
 
+function getrootdir()
+  return vim.fs.dirname(vim.fs.find({'.gradlew', '.git', 'mvnw'}, { upward = true })[1])
+end
 lsp.preset('recommended')
+lsp.configure('jdtls', {
+        cmd = {
+        "jdtls",
+        "--jvm-arg=" .. string.format(
+            "-javaagent:%s",
+            require("mason-registry").get_package("jdtls"):get_install_path() .. "/lombok.jar"
+        ),
+    },
+    root_dir = getrootdir
+})
 lsp.setup()
 lsp.set_preferences({
   suggest_lsp_servers = true,
@@ -129,7 +147,6 @@ lsp.ensure_installed({
 })
 EOF
 
-" opens a diagnostic window when an error is present on the line
 autocmd CursorHold * lua vim.diagnostic.open_float()
 lua <<EOF
 vim.diagnostic.config({
@@ -161,3 +178,30 @@ require'nvim-treesitter.configs'.setup {
   },
 }
 EOF
+
+" go imorts on save
+lua <<EOF
+  -- …
+
+  function go_org_imports(wait_ms)
+    local params = vim.lsp.util.make_range_params()
+    params.context = {only = {"source.organizeImports"}}
+    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, wait_ms)
+    for cid, res in pairs(result or {}) do
+      for _, r in pairs(res.result or {}) do
+        if r.edit then
+          local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
+          vim.lsp.util.apply_workspace_edit(r.edit, enc)
+        end
+      end
+    end
+  end
+EOF
+
+autocmd BufWritePre *.go lua go_org_imports()
+
+" fzf mappings
+nnoremap fg :GFiles<CR>
+
+" writenext shortcut
+nnoremap qq :wn<CR>
