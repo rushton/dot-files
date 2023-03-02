@@ -8,8 +8,8 @@ function main() {
     install_firefox
     install_kitty
     install_node
-    install_neovim
     install_golang
+    install_neovim
     install_tmux
     install_oh_my_zsh
     set_keyboard_preferences
