@@ -114,10 +114,19 @@ lsp.preset('recommended')
 lsp.configure('jdtls', {
         cmd = {
         "jdtls",
-        "--jvm-arg=" .. string.format(
-            "-javaagent:%s",
-            require("mason-registry").get_package("jdtls"):get_install_path() .. "/lombok.jar"
-        ),
+        "--jvm-arg=".."-javaagent:"..os.getenv( "HOME" ).."/.local/share/nvim/mason/packages/jdtls/lombok.jar",
+    },
+    settings = {
+        java = {
+            format = {
+                enabled = true,
+                settings = {
+                    -- https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml
+                    url = os.getenv( "HOME" ).."/eclipse-java-google-style.xml",
+                    profile = "GoogleStyle",
+                },
+            }
+        }
     },
     root_dir = getrootdir
 })
@@ -199,6 +208,11 @@ lua <<EOF
 EOF
 
 autocmd BufWritePre *.go lua go_org_imports()
+
+" Set tabwidth to 2 for java projects otherwise jdtls formatter
+" uses this over the formatting set on the language server.
+autocmd BufRead,BufNewFile *.java set tabstop=2
+autocmd BufRead,BufNewFile *.java set shiftwidth=2
 
 " fzf mappings
 nnoremap fg :GFiles<CR>
