@@ -9,6 +9,9 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
 
+" Java LSP support                                                                                                                                                                                  
+Plug 'mfussenegger/nvim-jdtls'
+
 " Autocompletion
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-buffer'
@@ -111,25 +114,6 @@ function getrootdir()
   return vim.fs.dirname(vim.fs.find({'.gradlew', '.git', 'mvnw'}, { upward = true })[1])
 end
 lsp.preset('recommended')
-lsp.configure('jdtls', {
-        cmd = {
-        "jdtls",
-        "--jvm-arg=".."-javaagent:"..os.getenv( "HOME" ).."/.local/share/nvim/mason/packages/jdtls/lombok.jar",
-    },
-    settings = {
-        java = {
-            format = {
-                enabled = true,
-                settings = {
-                    -- https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml
-                    url = os.getenv( "HOME" ).."/eclipse-java-google-style.xml",
-                    profile = "GoogleStyle",
-                },
-            }
-        }
-    },
-    root_dir = getrootdir
-})
 lsp.setup()
 lsp.set_preferences({
   suggest_lsp_servers = true,
@@ -147,7 +131,6 @@ lsp.set_preferences({
   }
 })
 lsp.ensure_installed({
-  'jdtls',
   'gopls',
   'bashls',
   'pyright',
