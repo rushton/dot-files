@@ -9,9 +9,6 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
 
-" Java LSP support                                                                                                                                                                                  
-Plug 'mfussenegger/nvim-jdtls'
-
 " Autocompletion
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-buffer'
@@ -19,6 +16,10 @@ Plug 'hrsh7th/cmp-path'
 Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-nvim-lua'
+
+
+" Java LSP support
+Plug 'mfussenegger/nvim-jdtls'
 
 "  Snippets
 Plug 'L3MON4D3/LuaSnip'
@@ -35,6 +36,11 @@ Plug 'preservim/nerdtree'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+
+" run tests in vim
+Plug 'vim-test/vim-test'
+
+Plug 'mfussenegger/nvim-dap'
 call plug#end()
 
 let g:onedark_config = {
@@ -104,7 +110,7 @@ vnoremap < <gv
 vnoremap > >gv
 
 " Autoformat files prior to write
-autocmd BufWritePre * :silent! lua vim.lsp.buf.format({async=false})
+"autocmd BufWritePre * :silent! lua vim.lsp.buf.format({async=false})
 
 " LSP support
 lua <<EOF
@@ -114,6 +120,26 @@ function getrootdir()
   return vim.fs.dirname(vim.fs.find({'.gradlew', '.git', 'mvnw'}, { upward = true })[1])
 end
 lsp.preset('recommended')
+-- lsp.configure('jdtls', {
+--         cmd = {
+--         "jdtls",
+--         "-Djava.format.settings.url=https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
+--         "--jvm-arg=".."-javaagent:"..os.getenv( "HOME" ).."/lombok-1.18.30.jar",
+--     },
+--     settings = {
+--         java = {
+--             format = {
+--                 enabled = false,
+--                 settings = {
+--                     -- https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml
+--                     url = os.getenv( "HOME" ).."/eclipse-java-google-style.xml",
+--                     profile = "GoogleStyle",
+--                 },
+--             }
+--         }
+--     },
+--     root_dir = getrootdir
+-- })
 lsp.setup()
 lsp.set_preferences({
   suggest_lsp_servers = true,
@@ -131,6 +157,7 @@ lsp.set_preferences({
   }
 })
 lsp.ensure_installed({
+  'jdtls',
   'gopls',
   'bashls',
   'pyright',
@@ -200,5 +227,19 @@ autocmd BufRead,BufNewFile *.java set shiftwidth=2
 " fzf mappings
 nnoremap fg :GFiles<CR>
 
+" go-to next error
+noremap ge :lua vim.diagnostic.goto_next()<CR>
+
 " writenext shortcut
 nnoremap qq :wn<CR>
+
+
+" vim-test bindings
+nmap <silent> <leader>t :TestNearest<CR>
+nmap <silent> <leader>T :TestFile<CR>
+nmap <silent> <leader>a :TestSuite<CR>
+nmap <silent> <leader>l :TestLast<CR>
+nmap <silent> <leader>g :TestVisit<CR>
+
+" stop lsp from interrupting with messages on startup
+set cmdheight=2
